@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0f766e">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Self care pharmacy</title>
+<style>
+:root{--bg:#0b1220;--card:#111a2b;--ink:#eef6ff;--muted:#9aa8bd;--line:#26344d;--deep:#08111f;--teal:#14b8a6;--teal2:#2dd4bf;--green:#22c55e;--amber:#f59e0b;--red:#ef4444;--soft:#162238;--shadow:0 26px 54px rgba(0,0,0,.42),0 10px 24px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.06)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;background:linear-gradient(180deg,#0b1220 0%,#101827 100%);color:var(--ink)}
+body{padding-bottom:18px}
+button{font-family:inherit;cursor:pointer;border:0}
+.top{position:sticky;top:0;z-index:50;background:#0b1220;color:#fff;padding:14px 12px 12px;box-shadow:0 12px 30px rgba(0,0,0,.30);border-bottom:1px solid #26344d}
+.head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.logo{display:flex;align-items:center;gap:10px;min-width:0}
+.mark{width:39px;height:39px;border-radius:14px;background:#17b8aa;color:#08111f;display:grid;place-items:center;font-weight:1000;font-size:17px;box-shadow:0 8px 20px rgba(23,184,170,.22)}
+.title{font-size:18px;font-weight:1000;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sync{font-size:11px;color:#9aa8bd;margin-top:3px;white-space:nowrap}
+.refresh{background:#152238;color:#eef6ff;border:1px solid #30415e;border-radius:13px;padding:9px 11px;font-size:13px;font-weight:900}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:0}
+.metric{background:#121d31;border:1px solid #2a3955;border-radius:15px;padding:9px 8px;text-align:center;color:#eef6ff;transition:.18s}
+.metric b{display:block;font-size:20px;line-height:1;font-weight:1000}
+.metric span{display:block;font-size:12px;color:#9aa8bd;margin-top:4px}
+.metric.active{background:#17b8aa;color:#07101d;border-color:#23d3c4;box-shadow:0 10px 22px rgba(23,184,170,.18)}
+.metric.active span{color:#073733}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.tab{background:#121d31;color:#cbd5e1;border:1px solid #2a3955;border-radius:15px;padding:10px 8px;font-size:14px;font-weight:1000}
+.tab.active{background:#17b8aa;color:#07101d;border-color:#23d3c4;box-shadow:0 10px 22px rgba(23,184,170,.18)}
+.tab .num{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:999px;margin-right:6px;background:#26344d;color:#dbeafe;font-size:12px;padding:0 7px}
+.tab.active .num{background:#07101d;color:#2dd4bf}
+.wrap{padding:14px 10px 0}
+.list{display:flex;flex-direction:column;gap:16px}
+.card{background:#111a2b;border:1px solid rgba(45,212,191,.86);border-radius:25px;box-shadow:0 30px 60px rgba(0,0,0,.44),0 12px 26px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.06);overflow:hidden;position:relative;outline:1px solid rgba(255,255,255,.05);margin-bottom:3px}
+.card:before{content:"";position:absolute;top:0;right:12px;left:12px;height:6px;border-radius:0 0 999px 999px;background:linear-gradient(90deg,#14b8a6,#2dd4bf);box-shadow:0 8px 18px rgba(45,212,191,.22)}
+.card-inner{padding:11px 12px 9px}
+.row-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.order-head{display:flex;align-items:center;gap:7px;min-width:0;flex-wrap:wrap}
+.code{display:inline-flex;align-items:center;border-radius:999px;background:#162238;color:#dffcff;border:1px solid #2dd4bf;font-size:19px;font-weight:1000;padding:7px 12px;line-height:1;letter-spacing:.2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.branch-code{display:inline-flex;align-items:center;border-radius:999px;background:#f59e0b;color:#111827;border:1px solid #fbbf24;font-size:13px;font-weight:1000;padding:7px 10px;line-height:1;white-space:nowrap}
+.badge{display:inline-flex;align-items:center;border-radius:999px;font-size:12px;font-weight:1000;padding:6px 10px;line-height:1;border:1px solid transparent;white-space:nowrap}
+.b-new{background:#102845;color:#93c5fd;border-color:#1d4ed8}
+.b-done{background:#10291e;color:#86efac;border-color:#16a34a}
+.info{border:1px solid #2f4261;border-radius:19px;background:#0e1728;overflow:hidden;margin:3px 0 10px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 8px 18px rgba(0,0,0,.13)}
+.info-row{display:grid;grid-template-columns:88px 1fr;gap:10px;align-items:center;min-height:39px;padding:8px 10px;border-top:1px solid #293951}
+.info-row:first-child{border-top:0}
+.label{font-size:12px;color:#9aa8bd;font-weight:900;line-height:1;text-align:right;white-space:nowrap}
+.value{font-size:13px;font-weight:950;color:#eef6ff;line-height:1.35;text-align:right;word-break:normal;overflow-wrap:anywhere}
+
+.amount-pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-start;direction:rtl}
+.amount-pill{display:inline-flex;align-items:center;border-radius:999px;background:#162238;border:1px solid #2f4261;color:#eef6ff;font-weight:1000;font-size:12px;padding:6px 9px;line-height:1;white-space:nowrap}
+.amount-pill.main{background:#112f2d;border-color:#14b8a6;color:#5eead4}
+.amount-pill.gbp{background:#2a1f10;border-color:#f59e0b;color:#fbbf24}
+.amount-pill.usd{background:#102845;border-color:#1d4ed8;color:#93c5fd}
+.amount-pill.eur{background:#26153d;border-color:#7c3aed;color:#c4b5fd}
+
+.items{border:1px solid #2f4261;border-radius:19px;background:#0e1728;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 8px 18px rgba(0,0,0,.13)}
+.items-title{display:flex;justify-content:space-between;align-items:center;background:#162238;border-bottom:1px solid #293951;padding:9px 11px;font-size:13px;font-weight:1000;color:#eef6ff}
+.item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:11px 11px;border-top:1px solid #22324b}
+.item:first-of-type{border-top:0}
+.item-name{font-size:14px;font-weight:950;line-height:1.35;color:#eef6ff;text-align:right;word-break:normal;overflow-wrap:anywhere}
+.qty{min-width:78px;text-align:center;border-radius:15px;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#111827;font-weight:1000;padding:8px 11px;font-size:15px;box-shadow:0 8px 18px rgba(245,158,11,.22)}
+.empty-items{padding:12px;color:#9aa8bd;font-size:13px;font-weight:900;text-align:center}
+.show-items{width:100%;height:42px;border-radius:15px;background:#162238;color:#2dd4bf;border:1px solid #2f4261;font-weight:1000;font-size:13px;margin:10px 0 0}
+.actions{display:grid;grid-template-columns:1fr;gap:7px;padding:0 12px 13px}
+.action{height:42px;border-radius:17px;font-size:13px;font-weight:1000;color:#fff;box-shadow:0 12px 24px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.18)}
+.action.prepare{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#111827}
+.action.back{background:linear-gradient(135deg,#475569,#64748b)}
+.empty{margin:28px auto 0;max-width:310px;text-align:center;background:#111a2b;border:1px solid #24344f;border-radius:24px;padding:22px 12px;color:#9aa8bd;font-weight:900;box-shadow:var(--shadow)}
+.empty-icon{width:44px;height:44px;border-radius:16px;background:#112f2d;color:#5eead4;display:grid;place-items:center;margin:0 auto 10px;font-size:21px}
+.toast{position:fixed;right:14px;left:14px;bottom:14px;z-index:100;background:#07101d;color:#fff;text-align:center;padding:12px;border-radius:15px;font-weight:950;box-shadow:0 16px 34px rgba(0,0,0,.35);opacity:0;transform:translateY(16px);pointer-events:none;transition:.22s}
+.toast.show{opacity:1;transform:translateY(0)}
+body.loading .refresh{opacity:.65}
+@media(min-width:760px){.top{max-width:760px;margin:0 auto;border-radius:0 0 22px 22px}.wrap{max-width:760px;margin:0 auto}.list{display:flex;flex-direction:column;gap:16px}}.wrap{max-width:760px;margin:0 auto}.list{display:grid;grid-template-columns:1fr 1fr;gap:16px}}.wrap{max-width:760px;margin:0 auto}.list{display:grid;grid-template-columns:1fr 1fr;gap:13px}}
+
+.items-modal{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.62);display:none;align-items:flex-end;justify-content:center;padding:16px}
+.items-modal.show{display:flex}
+.items-panel{width:100%;max-width:520px;max-height:82vh;background:#111a2b;border:1px solid rgba(45,212,191,.9);border-radius:24px;box-shadow:0 30px 70px rgba(0,0,0,.55);overflow:hidden;display:flex;flex-direction:column}
+.items-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;background:#162238;border-bottom:1px solid #293951}
+.items-panel-title{font-size:16px;font-weight:1000;color:#eef6ff}
+.items-panel-close{width:38px;height:38px;border-radius:13px;background:#0e1728;border:1px solid #2f4261;color:#eef6ff;font-size:20px;font-weight:1000}
+.items-panel-body{padding:10px;overflow:auto}
+.modal-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:11px 10px;border:1px solid #22324b;border-radius:16px;background:#0e1728;margin-bottom:8px}
+.modal-item-name{font-size:15px;font-weight:950;line-height:1.35;color:#eef6ff;text-align:right}
+.modal-qty{min-width:76px;text-align:center;border-radius:15px;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#111827;font-weight:1000;padding:8px 10px;font-size:15px}
+
+.modal-price{margin-top:5px;color:#fbbf24;font-size:12px;font-weight:1000}
+</style>
+
+<style id="force-single-column-fix">
+.wrap{width:100%!important;max-width:760px!important;margin:0 auto!important;padding:14px 10px 0!important}
+.list{display:flex!important;flex-direction:column!important;grid-template-columns:none!important;gap:16px!important;width:100%!important}
+.card{width:100%!important;max-width:none!important;min-width:0!important;display:block!important}
+.card-inner{width:100%!important;min-width:0!important}
+.info,.items{width:100%!important;min-width:0!important}
+.info-row{grid-template-columns:88px minmax(0,1fr)!important}
+.value,.item-name{min-width:0!important;white-space:normal!important;word-break:normal!important;overflow-wrap:break-word!important}
+@media(min-width:1px){.list{display:flex!important;flex-direction:column!important;grid-template-columns:none!important}.card{width:100%!important}}
+</style>
+
+
+<style id="card-size-pop-fix">
+.wrap{padding:12px 9px 0!important}
+.list{gap:14px!important}
+.card{
+  border-radius:24px!important;
+  border:1px solid rgba(45,212,191,.95)!important;
+  box-shadow:
+    0 34px 70px rgba(0,0,0,.50),
+    0 14px 30px rgba(0,0,0,.34),
+    0 0 0 1px rgba(255,255,255,.06) inset!important;
+  margin-bottom:4px!important;
+}
+.card:before{
+  height:7px!important;
+  right:16px!important;
+  left:16px!important;
+  box-shadow:0 10px 22px rgba(45,212,191,.30)!important;
+}
+.card-inner{padding:9px 10px 8px!important}
+.row-top{margin-bottom:8px!important}
+.code{font-size:18px!important;padding:6px 11px!important}
+.branch-code{font-size:12px!important;padding:6px 9px!important}
+.badge{font-size:11px!important;padding:5px 9px!important}
+.info{border-radius:17px!important;margin:2px 0 8px!important}
+.info-row{min-height:36px!important;padding:7px 9px!important;grid-template-columns:84px minmax(0,1fr)!important}
+.label{font-size:11px!important}
+.value{font-size:13px!important}
+.items{border-radius:17px!important}
+.items-title{padding:8px 10px!important}
+.item{padding:9px 10px!important}
+.qty{min-width:72px!important;padding:7px 10px!important;font-size:14px!important}
+.show-items{height:40px!important;margin:8px 0 0!important}
+.actions{padding:0 10px 11px!important}
+.action{height:40px!important;border-radius:16px!important}
+</style>
+
+
+
+
+<style id="background-light-fix">
+html,body{
+  background:linear-gradient(180deg,#18243a 0%,#1d2b44 100%)!important;
+}
+.top{
+  background:#111a2b!important;
+}
+</style>
+
+
+<style id="pharmacy-v18-fix">
+.card-inner{padding:8px 9px 7px!important}
+.row-top{margin-bottom:7px!important}
+.code{font-size:17px!important;padding:6px 10px!important}
+.branch-code{font-size:12px!important;padding:6px 8px!important}
+.badge{font-size:11px!important;padding:5px 8px!important}
+.info{margin:2px 0 7px!important;border-radius:16px!important}
+.info-row{min-height:34px!important;padding:6px 9px!important;grid-template-columns:82px minmax(0,1fr)!important}
+.items-title{padding:7px 10px!important}
+.item{padding:8px 10px!important}
+.qty{min-width:68px!important;padding:7px 9px!important;font-size:13px!important}
+.show-items{height:38px!important;margin:7px 0 0!important}
+.actions{padding:0 9px 10px!important}
+.action{height:39px!important}
+.items-modal.show{display:flex!important}
+</style>
+
+
+<style id="modal-center-fix">
+.items-modal{
+  position:fixed!important;
+  inset:0!important;
+  z-index:9999!important;
+  background:rgba(0,0,0,.68)!important;
+  display:none!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:18px!important;
+}
+.items-modal.show{
+  display:flex!important;
+}
+.items-panel{
+  width:100%!important;
+  max-width:520px!important;
+  max-height:78vh!important;
+  margin:auto!important;
+  background:#111a2b!important;
+  border:1px solid rgba(45,212,191,.95)!important;
+  border-radius:24px!important;
+  box-shadow:0 35px 80px rgba(0,0,0,.62)!important;
+  overflow:hidden!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+.items-panel-body{
+  max-height:calc(78vh - 65px)!important;
+  overflow:auto!important;
+  padding:10px!important;
+}
+</style>
+
+
+<style id="modal-scroll-lock-fix">
+html.modal-open, body.modal-open{
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+  touch-action:none!important;
+}
+.items-modal{
+  overscroll-behavior:contain!important;
+}
+.items-panel,
+.items-panel-body{
+  overscroll-behavior:contain!important;
+  touch-action:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+</style>
+
+
+<style id="modal-item-number-fix">
+.modal-item{
+  grid-template-columns:auto 1fr auto!important;
+}
+.modal-num{
+  width:30px;
+  height:30px;
+  border-radius:999px;
+  background:#162238;
+  border:1px solid #2f4261;
+  color:#2dd4bf;
+  display:inline-grid;
+  place-items:center;
+  font-size:13px;
+  font-weight:1000;
+}
+</style>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+
+
+<style id="pharmacy-v87-preparing-assignee-css">
+.metrics{grid-template-columns:repeat(3,1fr)!important}
+.b-preparing{background:#2a1f10;color:#fbbf24;border-color:#f59e0b}
+.action.prepare-start{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#111827}
+.action.finish{background:linear-gradient(135deg,#0f766e,#14b8a6);color:#07101d}
+.preparing-line{margin-top:6px;color:#fbbf24;font-size:12px;font-weight:1000;line-height:1.4}
+.preparer-grid{display:grid;grid-template-columns:1fr;gap:9px;padding:4px}
+.preparer-btn{min-height:48px;border-radius:16px;background:#0e1728;border:1px solid #2f4261;color:#eef6ff;font-size:15px;font-weight:1000}
+.preparer-btn:active{transform:scale(.99)}
+.preparer-note{background:#0e1728;border:1px solid #2f4261;border-radius:16px;padding:10px;color:#9aa8bd;font-size:12px;font-weight:900;line-height:1.5;margin-bottom:10px;text-align:right}
+@media(max-width:390px){.metric b{font-size:18px!important}.metric span{font-size:11px!important}.metrics{gap:6px!important}.metric{padding:8px 5px!important}}
+</style>
+
+<style id="pharmacy-v90-search-css">
+.pharmacy-search-row{margin-top:9px}
+.pharmacy-search-input{width:100%;min-height:46px;border-radius:16px;background:#0e1728;border:1px solid #2f4261;color:#eef6ff;padding:0 12px;font-size:14px;font-weight:900;outline:none;text-align:right}
+.pharmacy-search-input:focus{border-color:#2dd4bf;box-shadow:0 0 0 3px rgba(45,212,191,.12)}
+.pharmacy-search-input::placeholder{color:#9aa8bd}
+@media(max-width:390px){.pharmacy-search-input{min-height:44px;font-size:13px}}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="head">
+    <div class="logo">
+      <div class="mark">SC</div>
+      <div>
+        <div class="title">Self care pharmacy</div>
+        <div class="sync" id="lastSync">جاري التحديث...</div>
+      </div>
+    </div>
+    <button class="refresh" onclick="manualRefresh()">تحديث</button>
+  </div>
+  <div class="tabs">
+    <button class="tab active" id="todayTab" onclick="setDay('today')">النهاردة <span class="num" id="todayCount">٠</span></button>
+    <button class="tab" id="tomorrowTab" onclick="setDay('tomorrow')">بكرة <span class="num" id="tomorrowCount">٠</span></button>
+  </div>
+  <div class="metrics">
+    <button class="metric active" id="filterNew" onclick="setStatusFilter('new')"><b id="newCount">٠</b><span>جديد</span></button>
+    <button class="metric" id="filterPreparing" onclick="setStatusFilter('preparing')"><b id="preparingCount">٠</b><span>جاري التحضير</span></button>
+    <button class="metric" id="filterPrepared" onclick="setStatusFilter('prepared')"><b id="preparedCount">٠</b><span>اتحضر</span></button>
+  </div>
+  <div class="pharmacy-search-row">
+    <input class="pharmacy-search-input" id="pharmacySearch" placeholder="بحث برقم الطلب # أو الفندق" oninput="setPharmacySearch(this.value)">
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="list" id="ordersList"></div>
+  <div class="empty" id="ordersEmpty" style="display:none"><div class="empty-icon">✓</div><div>مفيش طلبات في القسم ده</div></div>
+</div>
+
+<div class="items-modal" id="itemsModal" onclick="closeItemsModal(event)">
+  <div class="items-panel" onclick="event.stopPropagation()">
+    <div class="items-panel-head">
+      <div class="items-panel-title" id="itemsModalTitle">قائمة الأصناف</div>
+      <button class="items-panel-close" onclick="hideItemsModal()">×</button>
+    </div>
+    <div class="items-panel-body" id="itemsModalBody"></div>
+  </div>
+</div>
+
+<div class="items-modal" id="preparerModal" onclick="closePreparerModal(event)">
+  <div class="items-panel" onclick="event.stopPropagation()">
+    <div class="items-panel-head">
+      <div class="items-panel-title" id="preparerModalTitle">اختار اللي هيحضّر الأوردر</div>
+      <button class="items-panel-close" onclick="hidePreparerModal()">×</button>
+    </div>
+    <div class="items-panel-body" id="preparerModalBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SB_URL="https://lbeuqkerbenrpycuvohl.supabase.co";
+const SB_KEY="sb_publishable_Lbqjl73U7lqbFNVB5Sj64A_vEe6z5cB";
+const SB_HEADERS={"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json","Prefer":"return=minimal"};
+// ريت العملات (يتحدّث من الأدمن عشان يبقى موحّد في كل مكان)
+let USD_RATE=50, EUR_RATE=60, GBP_RATE=70;
+async function loadSharedCurrencyRates(){
+  try{
+    const r=await fetch(SB_URL+"/rest/v1/settings?select=key,value",{headers:SB_HEADERS});
+    if(!r.ok)return;
+    const rows=await r.json();
+    const map={};
+    (rows||[]).forEach(x=>map[String(x.key||"")]=String(x.value||""));
+    const usd=Number(map.rate_usd), eur=Number(map.rate_eur), gbp=Number(map.rate_gbp);
+    if(Number.isFinite(usd)&&usd>0)USD_RATE=usd;
+    if(Number.isFinite(eur)&&eur>0)EUR_RATE=eur;
+    if(Number.isFinite(gbp)&&gbp>0)GBP_RATE=gbp;
+    if(typeof loadOrders==="function")loadOrders();
+  }catch(e){}
+}
+let orders=[];
+let shownOrders=[];
+let activeDay="today";
+let activeStatus="new";
+let pharmacySearch="";
+let refreshTimer=null;
+let currentDateKey=dayKey(new Date());
+let PHARMACY_PREPARERS=["مريم","غادة","بيتر"];
+const HOTEL_AR_NAMES={
+"Al Dora":"ال دورا",
+"Al Dora Hotel":"ال دورا هوتيل",
+"Al Dora Residence":"ال دورا ريسيدينكي",
+"Al Kasr":"القصر",
+"Al Kasr Hotel":"القصر هوتيل",
+"Al Kasr Sahl":"القصر ساهل",
+"Al Kasr Sahl Hasheesh":"القصر سهل حشيش",
+"Aladdin":"علاء الدين",
+"Aladdin Beach Resort":"علاء الدين بيتش ريزورت",
+"Albatros Alf Leila Wa Leila":"الباتروس ألف ليلة وليلة",
+"Albatros Aqua Blu":"الباتروس أكوا بلو",
+"Albatros Aqua Park":"الباتروس أكوا بارك",
+"Albatros Aqua Park Resort":"الباتروس أكوا بارك ريزورت",
+"Albatros Blu Spa":"الباتروس بلو سبا",
+"Albatros Citadel Resort":"الباتروس سيتادل ريزورت",
+"Albatros Makadi":"الباتروس مكادي",
+"Albatros Makadi Aqua Park":"الباتروس مكادي أكوا بارك",
+"Albatros Makadi Resort":"الباتروس مكادي ريزورت",
+"Albatros Palace":"الباتروس بالاس",
+"Albatros Palace Resort":"الباتروس بالاس ريزورت",
+"Aldau":"الداو",
+"Alf Leila Wa Leila":"ألف ليلة وليلة",
+"Ali Baba":"علي بابا",
+"Ali Baba Palace":"علي بابا بالاس",
+"Ali Baba Safaga":"علي بابا سفاجا",
+"Ali Baba Safaga Hotel":"علي بابا سفاجا هوتيل",
+"Ali Pasha":"علي باشا",
+"Alia Beach":"اليا بيتش",
+"Alia Beach Resort":"اليا بيتش ريزورت",
+"Alkasr Sahl Hasheesh":"القصر سهل حشيش",
+"Alma Bay Resort":"ألما باي ريزورت",
+"Amarina Abu Soma Resort":"أمارينا أبو سوما ريزورت",
+"AMC Royal":"إيه إم سي رويال",
+"AMC Royal Hotel & Spa":"إيه إم سي رويال هوتيل وسبا",
+"Amwaj Beach Club Abu Soma":"أمواج بيتش كلوب أبو سوما",
+"Ancient Sands El Gouna":"أنشنت ساندز الجونة",
+"Aqua Blu Resort":"أكوا بلو ريزورت",
+"Aqua Joy":"أكوا جوي",
+"Aqua Magic":"اكوا ماجيك",
+"Aqua Mondo Abu Soma":"أكوا موندو أبو سوما",
+"Aqua Vista Resort":"أكوا فيستا ريزورت",
+"Arabella Azur Resort":"أرابيلا أزور ريزورت",
+"Arabia Azur":"أرابيا أزور",
+"Arabia Azur Resort":"أرابيا أزور ريزورت",
+"Asteria":"أستيريا",
+"Azzurra Sahl Hasheesh":"أزورا سهل حشيش",
+"Baron Palace":"بارون بالاس",
+"Baron Palace Sahl Hasheesh":"بارون بالاس سهل حشيش",
+"Beach Albatros":"بيتش الباتروس",
+"Beach Albatros Resort":"بيتش الباتروس ريزورت",
+"Bel Air Azur":"بيل إير أزور",
+"Bel Air Azur Resort":"بيل إير أزور ريزورت",
+"Bella Vista":"بيلا فيستا",
+"Bella Vista Resort Hurghada":"بيلا فيستا ريزورت الغردقة",
+"Bellagio":"بيلاجيو",
+"Bellagio Beach Resort":"بيلاجيو بيتش ريزورت",
+"Blend Club Aqua Resort":"بلند كلوب أكوا ريزورت",
+"Blend Paradise":"بليند باراديسي",
+"Blu Spa":"بلو سبا",
+"Breakers Soma Bay":"برياكيرس سوما باي",
+"Calimera":"كاليميرا",
+"Calimera Blend Paradise":"كاليميرا بلند باراديس",
+"Calimera Blend Paradise Hurghada":"كاليميرا بلند باراديس الغردقة",
+"Calimera Hotel":"كاليميرا هوتيل",
+"Calimera Paradise":"كاليميرا باراديسي",
+"Caribbean World Soma Bay":"كاريبيان وورلد سوما باي",
+"Casa Cook":"كازا كوك",
+"Casa Cook El Gouna":"كازا كوك الجونة",
+"Cascades Soma Bay":"كاسكيدز سوما باي",
+"Caves Beach":"كيفز بيتش",
+"Caves Beach Resort":"كافيس بيتش ريزورت",
+"Citadel":"سيتاديل",
+"Citadel Resort":"سيتاديل ريزورت",
+"Cleopatra Luxury Makadi":"كليوباترا لاكشري مكادي",
+"Cleopatra Luxury Resort":"كليوباترا لاكشري ريزورت",
+"Cleopatra Luxury Resort Makadi Bay":"كليوباترا لاكشري ريزورت مكادي باي",
+"Cleopatra Makadi":"كليوباترا مكادي",
+"Club Azur Makadi":"كلوب أزور مكادي",
+"Club Azur Resort":"كلوب أزور ريزورت",
+"Continental":"كونتيننتال",
+"Continental Hotel Hurghada":"كونتيننتال هوتيل الغردقة",
+"Cook's Club El Gouna":"كوكس كلوب الجونة",
+"Cooks Club El Gouna":"كووكس كلوب الجونة",
+"Coopcs Club El Gouna":"كووبكس كلوب الجونة",
+"Coral Beach":"كورال بيتش",
+"Coral Beach Hurghada":"كورال بيتش الغردقة",
+"Coral Garden Resort Safaga":"كورال جاردن ريزورت سفاجا",
+"Coral Garden Safaga":"كورال جاردن سفاجا",
+"Coral Sun Beach":"كورال صن بيتش",
+"Coral Sun Beach Safaga":"كورال صن بيتش سفاجا",
+"Crystal Bay Resort":"كريستال باي ريزورت",
+"Dana Beach":"دانا بيتش",
+"Dana Beach Resort":"دانا بيتش ريزورت",
+"Dawar El Omda El Gouna":"دوار العمدة الجونة",
+"Desert Rose":"ديزرت روز",
+"Desert Rose Resort":"ديزرت روز ريزورت",
+"Diana Hotel":"ديانا هوتيل",
+"Diana Hotel Hurghada":"ديانا هوتيل الغردقة",
+"Eagles Downtown Zahabia":"ياجليس دوونتوون الذهبية",
+"Eagles Downtown Zahabia Resort & Aqua Park":"ياجليس دوونتوون الذهبية ريزورت وأكوا بارك",
+"Eagles Paradise Abu Soma Resort":"إيجلز باراديس أبو سوما ريزورت",
+"El Gouna":"الجونة",
+"El Palacio":"البلاسيو",
+"Elysees":"إليزيه",
+"Elysees Dream Beach":"إليزيه دريم بيتش",
+"Elysees Dream Beach Hotel":"إليزيه دريم بيتش هوتيل",
+"Elysees Hotel":"إليزيه هوتيل",
+"Elysees Hurghada":"إليزيه الغردقة",
+"Empire Beach":"إمباير بيتش",
+"Empire Beach Resort":"إمباير بيتش ريزورت",
+"Empire Beach Resort Hurghada":"إمباير بيتش ريزورت الغردقة",
+"Fanadir Hotel El Gouna":"فنادير هوتيل الجونة",
+"Festival Riviera":"فيستيفال ريفييرا",
+"Festival Riviera Resort":"فيستيفال ريفييرا ريزورت",
+"Flow Spectrum Resort":"فلوو سبيكتروم ريزورت",
+"Fort Arabesque":"فورت ارابيسكوي",
+"Fort Arabesque Resort":"فورت أرابيسك ريزورت",
+"Fort Arabesque Resort, Spa & Villas":"فورت ارابيسكوي ريزورت, سبا آند فيللاس",
+"Fort Arabesque The West Bay":"فورت أرابيسك ويست باي",
+"Four Seasons Hotel":"فوور سياسونس هوتيل",
+"Four Seasons Hotel Hurghada":"فوور سياسونس هوتيل الغردقة",
+"Gaisum Village":"جايسوم فيللاجي",
+"Geisum":"جييسوم",
+"Geisum Village":"جييسوم فيللاجي",
+"Giftun Azur":"جفتون ازور",
+"Giftun Azur Resort":"جفتون أزور ريزورت",
+"Golden Bay Makadi":"جولدين باي مكادي",
+"Golden Beach":"جولدن بيتش",
+"Golden Beach Resort":"جولدن بيتش ريزورت",
+"Grand Makadi":"جراند مكادي",
+"Grand Palace":"جراند بالاس",
+"Grand Water World Makadi":"جراند ووتر وورلد مكادي",
+"Grand Waterworld":"جراند ووتر وورلد",
+"Grand Waterworld Makadi":"جراند ووتر وورلد مكادي",
+"Grand Waterworld Makadi Bay":"جراند ووتر وورلد مكادي باي",
+"Grand Waterworld Resort Makadi":"جراند ووتر وورلد ريزورت مكادي",
+"Grand Watterword":"جراند واتتيروورد",
+"Grand Watterword Makadi":"جراند واتتيروورد مكادي",
+"Grand Watterworld":"جراند واتتيروورلد",
+"Grand Watterworld Makadi":"جراند واتتيروورلد مكادي",
+"Gravity Hotel":"جرافيتي هوتيل",
+"Gravity Hotel & Aqua Park Hurghada":"جرافيتي هوتيل وأكوا بارك الغردقة",
+"Gravity Hurghada":"جرافيتي الغردقة",
+"Gravity Sahl Hasheesh":"جرافيتي سهل حشيش",
+"Gravity Sahl Hasheesh Resort":"جرافيتي سهل حشيش ريزورت",
+"Harmony Makadi Bay":"هارموني مكادي باي",
+"Hawaii":"هاواي",
+"Hawaii Caesar":"هاواي كايسار",
+"Hawaii Caesar Palace":"هاواي كايسار بالاس",
+"Hawaii Caesar Palace Aqua Park":"هاواي كايسار بالاس أكوا بارك",
+"Hawaii Le Jardin":"هاواي لي جاردين",
+"Hawaii Le Jardin Aqua Park":"هاواي لي جاردين أكوا بارك",
+"Hawaii Paradise":"هاواي باراديسي",
+"Hawaii Paradise Aqua Park":"هاواي باراديسي أكوا بارك",
+"Hawaii Resorts":"هاواي ريزورتس",
+"Hawaii Riviera":"هاواي ريفييرا",
+"Hawaii Riviera Aqua Park":"هاواي ريفييرا أكوا بارك",
+"Hilton Hurghada Plaza":"هيلتون الغردقة بلازا",
+"Hilton Plaza":"هيلتون بلازا",
+"Hurghada Long Beach":"لونج بيتش الغردقة",
+"Hurghada Long Beach Resort":"الغردقة لونج بيتش ريزورت",
+"Hurghada Marriott Beach Resort":"ماريوت بيتش ريزورت الغردقة",
+"Iberotel Makadi Beach":"إيبروتيل مكادي بيتش",
+"Iberotel Makadi Beach Club":"إيبروتيل مكادي بيتش كلوب",
+"Imperial Shams Abu Soma":"إمبريال شمس أبو سوما",
+"Ivory Suites":"يفوري سويتيس",
+"Jasmine Palace":"جاسمين بالاس",
+"Jasmine Palace Resort":"جاسمين بالاس ريزورت",
+"Jasmine Village":"جاسميني فيللاجي",
+"Jaz Aquamarine":"جاز أكوامارين",
+"Jaz Aquamarine Resort":"جاز أكوامارين ريزورت",
+"Jaz Aquaviva":"جاز أكوافيفا",
+"Jaz Asteria":"جاز أستيريا",
+"Jaz Asteria Beach":"جاز أستيريا بيتش",
+"Jaz Blue Marine":"جاز بلوي ماريني",
+"Jaz Bluemarine":"جاز بلو مارين",
+"Jaz Casa Del Mar":"جاز كازا ديل مار",
+"Jaz Casa Del Mar Beach":"جاز كازا ديل مار بيتش",
+"Jaz Casa Del Mar Resort":"جاز كازا ديل مار ريزورت",
+"JAZ Elite Asteria":"جاز يليتي أستيريا",
+"Jaz Ivory":"جاز يفوري",
+"Jaz Makadi Blue":"جاز مكادي بلو",
+"Jaz Makadi Gardens":"جاز مكادي جاردنز",
+"Jaz Makadi Oasis":"جاز مكادي أواسيز",
+"Jaz Makadi Oasis Club":"جاز مكادي أواسيز كلوب",
+"Jaz Makadi Oasis Resort":"جاز مكادي أواسيز ريزورت",
+"Jaz Makadi Saraya":"جاز مكادي سرايا",
+"Jaz Makadi Saraya Palms":"جاز مكادي سرايا بالمز",
+"Jaz Makadi Saraya Resort":"جاز مكادي سرايا ريزورت",
+"Jaz Makadi Star":"جاز مكادي ستار",
+"Jaz Makadi Star & Spa":"جاز مكادي ستار آند سبا",
+"Jaz Makadi Star and Spa":"جاز مكادي ستار اند سبا",
+"Jaz Makadina":"جاز مكادينا",
+"Jaz Makadina Resort":"جاز مكادينا ريزورت",
+"Jaz Neo Ivory":"جاز نيو يفوري",
+"Jaz Neo Ivory Hurghada":"جاز نيو يفوري الغردقة",
+"Jaz Soma Beach":"جاز سوما بيتش",
+"Jewels Sahara":"جيويلس ساهارا",
+"Jewels Sahara Boutique Resort":"جيويلس ساهارا بووتيكوي ريزورت",
+"Jolie Bay":"جوليي باي",
+"Jungle":"جونجلي",
+"Jungle Aqua Park":"جنجل أكوا بارك",
+"Kai Sahl Hasheesh":"كاي سهل حشيش",
+"Kaisol Romance":"كايسول رومانس",
+"Kaisol Romance Resort Sahl Hasheesh":"كايسول رومانس ريزورت سهل حشيش",
+"Kempinski Hotel Soma Bay":"كمبينسكي هوتيل سوما باي",
+"Kempinski Soma Bay":"كمبينسكي سوما باي",
+"King Tut":"كينج توت",
+"King Tut Aqua Park":"كينج توت أكوا بارك",
+"King Tut Aqua Park Beach Resort":"كينج توت أكوا بارك بيتش ريزورت",
+"King Tut Resort":"كينج توت ريزورت",
+"La Maison Bleue El Gouna":"لا ميزون بلو الجونة",
+"Labranda":"لابراندا",
+"Labranda Club Makadi":"لابراندا كلوب مكادي",
+"Labranda Club Makadi Resort":"لابراندا كلوب مكادي ريزورت",
+"Labranda Garden Makadi":"لابراندا جاردن مكادي",
+"Labranda Royal Makadi":"لابراندا رويال مكادي",
+"Labranda Royal Makadi Resort":"لابراندا رويال مكادي ريزورت",
+"Lamar Resort Abu Soma":"لامار ريزورت أبو سوما",
+"Le Jardin":"لي جاردين",
+"Le Pacha":"لو باشا",
+"Le Pacha Resort":"لو باشا ريزورت",
+"Lemon & Soul":"ليمون آند سول",
+"Lemon & Soul Makadi":"ليمون سول مكادي",
+"Lemon and Soul Makadi":"ليمون آند سول مكادي",
+"Lemon Soul Garden Makadi Bay":"ليمون سول جاردن مكادي باي",
+"Lemon Soul Makadi":"ليمون سوول مكادي",
+"Long Beach":"لونج بيتش",
+"Lotus Bay Resort":"لوتس باي ريزورت",
+"Makadi Aqua Park":"مكادي أكوا بارك",
+"Makadi Bay Hotel":"مكادي باي هوتيل",
+"Makadi Heights":"مكادي هايتس",
+"Makadi Palace":"مكادي بالاس",
+"Makadi Spa":"مكادي سبا",
+"Makadi Spa Hotel":"مكادي سبا هوتيل",
+"Makadi Sun":"مكادي صن",
+"Mamlouk Palace":"مملوك بالاس",
+"Mangroovy El Gouna":"مانجروفي الجونة",
+"Marlin Inn":"مارلين إن",
+"Marriott Beach Resort":"ماريوت بيتش ريزورت",
+"Marriott Hurghada":"ماريوت الغردقة",
+"Mashrabiya":"ماسهرابييا",
+"Mashrabiya Hotel":"ماسهرابييا هوتيل",
+"Menaville Safaga":"مينافيل سفاجا",
+"Meraki":"ميراكي",
+"Meraki Resort Hurghada":"ميراكي ريزورت الغردقة",
+"Mercure":"ميركيور",
+"Mercure Hurghada":"ميركيور الغردقة",
+"Mercure Hurghada Hotel":"ميركيور الغردقة هوتيل",
+"Minamark":"مينا مارك",
+"Minamark Hotel":"مينا مارك هوتيل",
+"Mirage Bay":"ميراج باي",
+"Mirage Bay Resort":"ميراج باي ريزورت",
+"Mirage Bay Resort & Aqua Park":"ميراج باي ريزورت وأكوا بارك",
+"Mirage New Hawaii":"ميراجي نيو هاواي",
+"Mirage New Hawaii Resort":"ميراجي نيو هاواي ريزورت",
+"Mirette":"ميريتتي",
+"Mosaique Hotel El Gouna":"موزاييك هوتيل الجونة",
+"Movenpick":"موفنبيك",
+"Movenpick Resort & Spa El Gouna":"موفنبيك ريزورت وسبا الجونة",
+"Movenpick Soma Bay":"موفنبيك سوما باي",
+"Movenpick Waterpark Resort & Spa Soma Bay":"موفنبيك واتيربارك ريزورت وسبا سوما باي",
+"Movenpick Waterpark Soma Bay":"موفنبيك واتيربارك سوما باي",
+"Mövenpick":"موفنبيك",
+"Mövenpick Resort & Spa El Gouna":"موفنبيك ريزورت وسبا الجونة",
+"Mövenpick Soma Bay":"موفنبيك سوما باي",
+"Naga Bay":"ناجا باي",
+"Nemo Dive Club":"نيمو دايف كلوب",
+"Nemo Dive Club & Hotel":"نيمو دايف كلوب آند هوتيل",
+"Nemo Hotel Safaga":"نيمو هوتيل سفاجا",
+"Neverland":"نيفيرلاند",
+"Neverland City Hurghada":"نيفيرلاند كيتي الغردقة",
+"Neverland Hurghada":"نيفرلاند الغردقة",
+"New Eagles Aqua Park":"نيو إيجلز أكوا بارك",
+"New Eagles Aqua Park Resort":"نيو إيجلز أكوا بارك ريزورت",
+"New Eagles Resort":"نيو إيجلز ريزورت",
+"New Gaisum":"نيو جايسوم",
+"New Gaisum Resort":"نيو جايسوم ريزورت",
+"New Geisum":"نيو جييسوم",
+"New Geisum Resort":"نيو جييسوم ريزورت",
+"New Hawaii":"نيو هاواي",
+"Nubia":"نوبيا",
+"Nubia Aqua Beach Resort":"نوبيا اكوا بيتش ريزورت",
+"Ocean View El Gouna":"أوشن فيو الجونة",
+"Old Palace":"ولد بالاس",
+"Old Palace Resort Sahl Hasheesh":"أولد بالاس سهل حشيش",
+"Old Vic":"ولد فيك",
+"Old Vic Resort":"ولد فيك ريزورت",
+"Orca Village Safaga":"أوركا فيليدج سفاجا",
+"Palm Beach":"بالم بيتش",
+"Palm Beach Resort":"بالم بيتش ريزورت",
+"Palm Royale Soma Bay":"بالم رويال سوما باي",
+"Palma De Mirette":"بالما دي ميريتتي",
+"Paradise Abu Soma":"باراديس أبو سوما",
+"Paradise Abu Soma Resort":"باراديس أبو سوما ريزورت",
+"Paradise Beach":"باراديس بيتش",
+"Paradise Beach Safaga":"باراديس بيتش سفاجا",
+"Pharaoh Azur":"فرعون أزور",
+"Pharaoh Azur Resort":"فرعون أزور ريزورت",
+"Pickalbatros Alf Leila Wa Leila Resort":"بيك الباتروس ألف ليلة وليلة ريزورت",
+"Pickalbatros Aqua Blu":"بيك الباتروس أكوا بلو",
+"Pickalbatros Aqua Blu Resort":"بيك الباتروس أكوا بلو ريزورت",
+"Pickalbatros Aqua Park":"بيك الباتروس أكوا بارك",
+"Pickalbatros Aqua Park Resort":"بيك الباتروس أكوا بارك ريزورت",
+"Pickalbatros Aqua Park Resort Hurghada":"بيك الباتروس أكوا بارك ريزورت الغردقة",
+"Pickalbatros Aqua Vista":"بيك الباتروس أكوا فيستا",
+"Pickalbatros Aqua Vista Resort":"بيك الباتروس أكوا فيستا ريزورت",
+"Pickalbatros Blu Spa Resort":"بيك الباتروس بلو سبا ريزورت",
+"Pickalbatros Citadel Resort":"بيك الباتروس سيتادل ريزورت",
+"Pickalbatros Dana Beach Resort":"بيك الباتروس دانا بيتش ريزورت",
+"Pickalbatros Jungle Aqua Park":"بيك الباتروس جنجل أكوا بارك",
+"Pickalbatros Makadi Aqua Park":"بيك الباتروس مكادي أكوا بارك",
+"Pickalbatros Makadi Resort":"بيك الباتروس مكادي ريزورت",
+"Pickalbatros Neverland":"بيك الباتروس نيفيرلاند",
+"Pickalbatros Water Valley Resort":"بيك الباتروس ووتر فالي ريزورت",
+"Pickalbatros White Beach":"بيك الباتروس وايت بيتش",
+"Pickalbatros White Beach Resort":"بيك الباتروس وايت بيتش ريزورت",
+"Premier Le Reve":"بريمير لو ريف",
+"Premier Le Reve Hotel & Spa":"بريمير لو ريف هوتيل وسبا",
+"Premier Le Reve Sahl Hasheesh":"بريمير لو ريف سهل حشيش",
+"Prima Life Makadi":"بريما لايف مكادي",
+"Prima Life Makadi Resort":"بريما لايف مكادي ريزورت",
+"Prima Life Makadi Resort & Spa":"بريما لايف مكادي ريزورت وسبا",
+"Pyramisa":"بيراميزا",
+"Pyramisa Beach Resort Sahl Hasheesh":"بيراميزا بيتش ريزورت سهل حشيش",
+"Ras Soma":"رأس سوما",
+"Ras Soma Steigenberger":"رأس سوما شتايجنبرجر",
+"Red Sea Taj Mahal Resort":"ريد سي تاج ماهال ريزورت",
+"Regina Resort":"ريجينا ريزورت",
+"Regina Swiss Inn":"ريجينا سويس إن",
+"Regina Swiss Inn Resort":"ريجينا سويس إن ريزورت",
+"Rihana":"ريهانا",
+"Rixos Magawish":"ريكسوس ماجاويسه",
+"Rixos Premium Magawish":"ريكسوس بريميوم ماجاويسه",
+"Robinson Soma Bay":"روبنسون سوما باي",
+"Royal Lagoons":"رويال لاجوونس",
+"Royal Lagoons Resort":"رويال لاجونز ريزورت",
+"Royal Lagoons Resort & Aqua Park":"رويال لاجوونس ريزورت وأكوا بارك",
+"Royal Pharaohs Makadi":"رويال فاروز مكادي",
+"Royal Star":"رويال ستار",
+"Royal Star Beach Resort":"رويال ستار بيتش ريزورت",
+"Sahara Boutique Resort":"ساهارا بووتيكوي ريزورت",
+"Sea Star":"سيا ستار",
+"Sea Star Beau Rivage":"سي ستار بو ريفاج",
+"Seagull":"سي جل",
+"Seagull Beach Resort":"سي جل بيتش ريزورت",
+"Sentido Mamlouk Palace":"سينتيدو مملوك بالاس",
+"Sentido Naga Bay":"سينتيدو ناجا باي",
+"Sentido Palm Royale Soma Bay":"سينتيدو بالم رويال سوما باي",
+"Serenity":"سيرينيتي",
+"Serenity Alma Heights":"سيرينيتي الما هايتس",
+"Serenity Alma Heights / Fun City":"سيرينيتي الما هايتس / فون كيتي",
+"Serenity Alpha Beach":"سيرينيتي ألفا بيتش",
+"Serenity Alpha Beach Makadi Bay":"سيرينيتي ألفا بيتش مكادي باي",
+"Serenity Fun City":"سيرينيتي فون كيتي",
+"Serenity Makadi Beach":"سيرينيتي مكادي بيتش",
+"Serenity Makadi Heights":"سيرينيتي مكادي هايتس",
+"Serenity Sahl Hasheesh":"سيرينيتي سهل حشيش",
+"Serenity Sky Arc":"سيرينيتي سكي ارك",
+"Serry Beach Hurghada":"سيري بيتش الغردقة",
+"Serry Beach Resort":"سيري بيتش ريزورت",
+"Seva Golden Bay":"سيفا جولدين باي",
+"Seven Seas Hotel Jolie Bay":"سيفين سياس هوتيل جوليي باي",
+"Seven Seas Jolie Bay":"سفن سيز جولي باي",
+"Shams Lodge Water Sports Resort":"شمس لودج ووتر سبورتس ريزورت",
+"Shams Prestige":"شمس بريستيج",
+"Shams Prestige Abu Soma":"شمس بريستيج أبو سوما",
+"Shams Prestige Abu Soma Resort":"شمس بريستيج أبو سوما ريزورت",
+"Shams Safaga Resort":"شمس سفاجا ريزورت",
+"Sheraton Miramar":"شيراتون ميرامار",
+"Sheraton Soma Bay":"شيراتون سوما باي",
+"Sheraton Soma Bay Resort":"شيراتون سوما باي ريزورت",
+"Sindbad Club":"سندباد كلوب",
+"Siva Golden":"سيفا جولدين",
+"Siva Golden Bay":"سيفا جولدن باي",
+"Siva Golden Bay Hotel":"سيفا جولدن باي هوتيل",
+"Siva Golden Bay Makadi":"سيفا جولدن باي مكادي",
+"Siva Golden Bay Resort":"سيفا جولدن باي ريزورت",
+"Siva Grand Beach":"سيفا جراند بيتش",
+"Siva Grand Beach Hotel":"سيفا جراند بيتش هوتيل",
+"Sky View":"سكي فييو",
+"Sky View Suites":"سكي فييو سويتيس",
+"Sky View Suites Hotel":"سكي فييو سويتيس هوتيل",
+"Sol Y Mar Makadi Sun":"سول واي مار مكادي صن",
+"Sol Y Mar Paradise Beach":"سول واي مار باراديس بيتش",
+"Solymar Makadi Sun":"سوليمار مكادي صن",
+"Solymar Paradise Beach":"سوليمار باراديس بيتش",
+"Solymar Soma Beach":"سوليمار سوما بيتش",
+"Sphinx":"سفنكس",
+"Sphinx Aqua Park":"سفنكس أكوا بارك",
+"Sphinx Aqua Park Beach Resort":"سفنكس أكوا بارك بيتش ريزورت",
+"Sphinx Resort":"سفنكس ريزورت",
+"SRNTY":"سيرينتي",
+"SRNTY Resort":"سيرينتي ريزورت",
+"SRNTY Sahl Hasheesh":"سيرينتي سهل حشيش",
+"Steigenberger ALDAU":"شتايجنبرجر الداو",
+"Steigenberger ALDAU Beach Hotel":"شتايجنبرجر الداو بيتش هوتيل",
+"Steigenberger Aldau Beach Hotel":"شتايجنبرجر الداو بيتش هوتيل",
+"Steigenberger Aqua Magic":"شتايجنبرجر أكوا ماجيك",
+"Steigenberger Aqua Magic Hurghada":"شتايجنبرجر أكوا ماجيك الغردقة",
+"Steigenberger Golf":"شتايجنبرجر جولف",
+"Steigenberger Golf Resort El Gouna":"شتايجنبرجر جولف ريزورت الجونة",
+"Steigenberger Makadi":"شتايجنبرجر مكادي",
+"Steigenberger Makadi Resort":"شتايجنبرجر مكادي ريزورت",
+"Steigenberger Pure Lifestyle":"شتايجنبرجر بيور لايف ستايل",
+"Steigenberger Ras Soma":"شتايجنبرجر رأس سوما",
+"Steigenberger Resort Ras Soma":"شتايجنبرجر ريزورت رأس سوما",
+"Stella Beach Makadi":"ستيلا بيتش مكادي",
+"Stella Beach Resort & Spa Makadi Bay":"ستيلا بيتش ريزورت آند سبا مكادي باي",
+"Stella Beach Resort Makadi Bay":"ستيلا بيتش ريزورت مكادي باي",
+"Stella Di Mare":"ستيلا دي ماري",
+"Stella Di Mare Makadi Bay":"ستيلا دي ماري مكادي باي",
+"Stella Gardens Makadi":"ستيلا جاردنز مكادي",
+"Stella Gardens Resort & Spa Makadi Bay":"ستيلا جاردنز ريزورت وسبا مكادي باي",
+"Stella Gardens Resort Makadi Bay":"ستيلا جاردنز ريزورت مكادي باي",
+"Stella Makadi":"ستيلا مكادي",
+"Sultan Bey El Gouna":"سلطان بيه الجونة",
+"Sun Beach Abu Soma":"صن بيتش أبو سوما",
+"Sun Beach Hotel Abu Soma":"سون بيتش هوتيل أبو سوما",
+"Sun Beach Hotel Safaga":"سون بيتش هوتيل سفاجا",
+"Sun Beach Safaga":"صن بيتش سفاجا",
+"Sunny Days":"صني دايز",
+"Sunny Days El Palacio":"صني دايز البلاسيو",
+"Sunny Days El Palacio Resort & Spa":"صني دايز البلاسيو ريزورت وسبا",
+"Sunny Days Mirette":"صني دايز ميريتتي",
+"Sunny Days Palma De Mirette":"صني دايز بالما دي ميريتتي",
+"Sunny Days Palma De Mirette Resort & Spa":"صني دايز بالما دي ميريتتي ريزورت وسبا",
+"Sunrise":"صن رايز",
+"Sunrise Alma Bay":"صن رايز ألما باي",
+"Sunrise Alma Bay Resort":"صن رايز ألما باي ريزورت",
+"Sunrise Aqua Joy":"صن رايز أكوا جوي",
+"Sunrise Aqua Joy Resort":"صن رايز أكوا جوي ريزورت",
+"Sunrise Crystal Bay":"صن رايز كريستال باي",
+"Sunrise Crystal Bay Resort":"صن رايز كريستال باي ريزورت",
+"Sunrise Garden Beach":"صن رايز جاردن بيتش",
+"Sunrise Garden Beach Resort":"صن رايز جاردن بيتش ريزورت",
+"Sunrise Holidays Resort":"صن رايز هوليدايز ريزورت",
+"Sunrise Mamlouk":"صن رايز ماملووك",
+"Sunrise Mamlouk Palace Resort":"صن رايز مملوك بالاس ريزورت",
+"Sunrise Royal Makadi":"صن رايز رويال مكادي",
+"Sunrise Royal Makadi Resort":"صن رايز رويال مكادي ريزورت",
+"Sunrise Tucana":"صن رايز توكانا",
+"Sunrise Tucana Resort":"صن رايز توكانا ريزورت",
+"Sunwing Makadi":"سونوينج مكادي",
+"Sunwing Waterworld Makadi":"سونوينج واتيروورلد مكادي",
+"Swiss Inn":"سويس إن",
+"Swiss Inn Resort Hurghada":"سويس إن ريزورت الغردقة",
+"The Breakers Diving & Surfing Lodge Soma Bay":"ذا بريكرز ديفينج آند سورفينج لودج سوما باي",
+"The Breakers Soma Bay":"ذا بريكرز سوما باي",
+"The Cascades Golf Resort, Spa & Thalasso":"تهي كاسكيدز جولف ريزورت, سبا آند تهالاسسو",
+"The Cascades Soma Bay":"تهي كاسكيدز سوما باي",
+"The Club Azur Resort":"تهي كلوب أزور ريزورت",
+"The Grand Hotel":"جراند هوتيل",
+"The Grand Hotel Hurghada":"جراند هوتيل الغردقة",
+"The Grand Makadi":"تهي جراند مكادي",
+"The Grand Palace":"تهي جراند بالاس",
+"The Grand Resort":"جراند ريزورت",
+"The Grand Resort Hurghada":"جراند ريزورت الغردقة",
+"The Oberoi Sahl Hasheesh":"تهي أوبروي سهل حشيش",
+"The Three Corners Ocean View":"ذا ثري كورنرز أوشن فيو",
+"The Three Corners Ocean View El Gouna":"ذا ثري كورنرز أوشن فيو الجونة",
+"The Three Corners Sunny Beach Resort":"ذا ثري كورنرز سونني بيتش ريزورت",
+"The V Luxury Resort Sahl Hasheesh":"تهي في لاكشري ريزورت سهل حشيش",
+"The V Sahl Hasheesh":"تهي ف سهل حشيش",
+"Three Corners":"ثري كورنرز",
+"Three Corners Rihana":"ثري كورنرز ريهانا",
+"Three Corners Rihana Resort":"ثري كورنرز ريهانا ريزورت",
+"Three Corners Sunny Beach":"ثري كورنرز صني بيتش",
+"Three Corners Sunny Beach Resort":"ثري كورنرز سونني بيتش ريزورت",
+"Tia Heights":"تيا هايتس",
+"Tia Heights Makadi Bay":"تيا هايتس مكادي باي",
+"Tiba Golden":"تيبا جولدين",
+"Tiba Golden Resort":"تيبا جولدين ريزورت",
+"Titanic Aqua Park":"تيتانيك أكوا بارك",
+"Titanic Aqua Park Resort":"تيتانيك أكوا بارك ريزورت",
+"Titanic Beach":"تيتانيك بيتش",
+"Titanic Beach Spa & Aqua Park":"تيتانيك بيتش سبا وأكوا بارك",
+"Titanic Palace":"تيتانيك بالاس",
+"Titanic Royal":"تيتانيك رويال",
+"Titanic Royal Resort":"تيتانيك رويال ريزورت",
+"Tropitel":"تروبيتل",
+"Tropitel Elite Sahl Hasheesh":"تروبيتل يليتي سهل حشيش",
+"Tropitel Sahl Hasheesh":"تروبيتل سهل حشيش",
+"Tropitel Sahl Hasheesh Resort":"تروبيتل سهل حشيش ريزورت",
+"TUI Blue Makadi":"توي بلو مكادي",
+"TUI Blue Makadi Gardens":"توي بلو مكادي جاردنز",
+"V Luxury Resort Sahl Hasheesh":"في لاكشري ريزورت سهل حشيش",
+"Veranda Resort":"فيرندا ريزورت",
+"Veranda Sahl Hasheesh":"فيرندا سهل حشيش",
+"Veranda Sahl Hasheesh Resort":"فيرندا سهل حشيش ريزورت",
+"Water Valley Resort":"ووتر فالي ريزورت",
+"White Beach":"وايت بيتش",
+"Xanadu Makadi Bay":"زانادو مكادي باي",
+"Zahabia":"الذهبية",
+"Zahabia Eagles":"الذهبية ياجليس",
+"Zahabia Hotel":"الذهبية هوتيل",
+"Zahabia Hotel & Beach Resort":"الذهبية هوتيل آند بيتش ريزورت",
+"Zahabia Resort":"الذهبية ريزورت",
+"Zen Resort Sahl Hasheesh":"زين ريزورت سهل حشيش"
+};
+const HOTEL_LOOKUP=Object.fromEntries(Object.entries(HOTEL_AR_NAMES).map(([k,v])=>[normalize(k),v]));
+
+function init(){loadPharmacyPreparers();loadSharedCurrencyRates();loadOrders();refreshTimer=setInterval(loadOrders,10000);setInterval(loadSharedCurrencyRates,300000);setInterval(checkDateRollover,30000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)loadOrders()});window.addEventListener("focus",loadOrders)}
+function checkDateRollover(){const k=dayKey(new Date());if(k!==currentDateKey){currentDateKey=k;activeDay="today";activeStatus="new";loadOrders()}}
+function dayKey(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+
+async function loadPharmacyPreparers(){
+  try{
+    const r=await fetch(SB_URL+"/rest/v1/pharmacy_preparers?select=name,is_active,sort_order&is_active=eq.true&order=sort_order.asc,name.asc",{headers:SB_HEADERS});
+    if(!r.ok)throw new Error("load preparers failed");
+    const rows=await r.json();
+    const names=(rows||[]).map(x=>clean(x.name)).filter(Boolean);
+    if(names.length)PHARMACY_PREPARERS=names;
+  }catch(e){}
+}
+async function loadOrders(){
+  try{
+    document.body.classList.add("loading");
+    const url=SB_URL+"/rest/v1/orders?select=*&order=created_at.desc&limit=500&or=(source.neq.essentials,source.is.null)";
+    const r=await fetch(url,{headers:SB_HEADERS});
+    const d=await r.json();
+    if(!r.ok)throw new Error(d&&d.message?d.message:"load failed");
+    orders=dedupeOrders(filterCancelledGroups(Array.isArray(d)?d:[]));
+    document.getElementById("lastSync").textContent="آخر تحديث: "+arNum(new Date().toLocaleTimeString("ar-EG",{hour:"numeric",minute:"2-digit"}));
+    render();
+  }catch(e){
+    document.getElementById("lastSync").textContent="فشل التحديث";
+    document.getElementById("ordersList").innerHTML="";
+    const empty=document.getElementById("ordersEmpty");
+    empty.style.display="block";
+    empty.innerHTML='<div class="empty-icon">!</div><div>تعذر تحميل الطلبات. اضغط تحديث.</div>';
+    toast("حصل خطأ في تحميل الطلبات");
+  }finally{
+    document.body.classList.remove("loading");
+  }
+}
+function manualRefresh(){loadOrders();toast("تم التحديث")}
+function setDay(day){activeDay=day;document.getElementById("todayTab").classList.toggle("active",day==="today");document.getElementById("tomorrowTab").classList.toggle("active",day==="tomorrow");render()}
+function setStatusFilter(status){activeStatus=activeStatus===status?status:status;render()}
+function setPharmacySearch(v){pharmacySearch=String(v||"").trim();render()}
+
+function render(){
+  const visibleOrders=orders.filter(showInPharmacy);
+  const today=visibleOrders.filter(o=>effectiveDay(o)==="today");
+  const tomorrow=visibleOrders.filter(o=>effectiveDay(o)==="tomorrow");
+  document.getElementById("todayCount").textContent=arNum(today.length);
+  document.getElementById("tomorrowCount").textContent=arNum(tomorrow.length);
+  let current=(activeDay==="today"?today:tomorrow).sort(sortOrders);
+  document.getElementById("newCount").textContent=arNum(current.filter(o=>pharmacyStatus(o)==="new").length);
+  document.getElementById("preparingCount").textContent=arNum(current.filter(o=>pharmacyStatus(o)==="preparing").length);
+  document.getElementById("preparedCount").textContent=arNum(current.filter(o=>pharmacyStatus(o)==="prepared").length);
+  document.getElementById("filterNew").classList.toggle("active",activeStatus==="new");
+  document.getElementById("filterPreparing").classList.toggle("active",activeStatus==="preparing");
+  document.getElementById("filterPrepared").classList.toggle("active",activeStatus==="prepared");
+  current=current.filter(o=>pharmacyStatus(o)===activeStatus).filter(pharmacySearchPass);
+  shownOrders=current;
+  const list=document.getElementById("ordersList");
+  const empty=document.getElementById("ordersEmpty");
+  if(!current.length){
+    list.innerHTML="";
+    empty.style.display="block";
+    empty.innerHTML='<div class="empty-icon">✓</div><div>'+ (pharmacySearch ? 'مفيش طلبات مطابقة للبحث' : 'مفيش طلبات في القسم ده') +'</div>';
+    return;
+  }
+  empty.style.display="none";
+  list.innerHTML=current.map(card).join("");
+}
+
+function card(o){
+  const st=pharmacyStatus(o);
+  const items=getItems(o);
+  const hotel=hotelArName(o.hotel);
+  const room=clean(o.room);
+  const dateText=formatDateAr(effectiveDate(o));
+  const ready=readyBefore(o);
+  const code=branchCode(o.branch);
+  return `<article class="card">
+    <div class="card-inner">
+      <div class="row-top">
+        <div class="order-head">
+          <div class="code">طلب #${esc(arNum(o.id))}</div>
+          ${code?`<div class="branch-code">كود ${esc(arNum(code))}</div>`:""}
+        </div>
+        <div class="badge ${st==="prepared"?"b-done":st==="preparing"?"b-preparing":"b-new"}">${st==="prepared"?"اتحضر":st==="preparing"?"جاري التحضير":"جديد"}</div>
+      </div>
+      <div class="info">
+        <div class="info-row"><div class="label">الفندق</div><div class="value">${esc(hotel)}</div></div>
+        <div class="info-row"><div class="label">التاريخ</div><div class="value">${esc(dateText)}</div></div>
+        <div class="info-row"><div class="label">جاهز قبل</div><div class="value">${esc(ready||"غير محدد")}</div></div>
+        ${(st==="preparing"||st==="prepared")?`<div class="info-row"><div class="label">${st==="prepared"?"حضّره":"بيحضره"}</div><div class="value"><span style="color:#fbbf24">${esc(preparerName(o)||"غير محدد")}</span></div></div>`:""}
+        <div class="info-row"><div class="label">ميعاد الوصول</div><div class="value">${esc(ar12(o.delivery_time)||"غير محدد")}</div></div>
+        <div class="info-row"><div class="label">الدفع</div><div class="value">${esc(paymentAr(o.payment))}</div></div>
+        <div class="info-row"><div class="label">الدليفري</div><div class="value">${deliveryFeeHtml(o)}</div></div>
+        <div class="info-row"><div class="label">الإجمالي</div><div class="value">${amountHtml(o)}</div></div>
+        <div class="info-row"><div class="label">رقم الغرفة</div><div class="value">${esc(room?arNum(room):"غير محدد")}</div></div>
+      </div>
+      <div class="items">
+        <div class="items-title"><span>الأصناف</span><span>${arNum(items.length)} صنف</span></div>
+        ${itemsBlock(o,items)}
+      </div>
+    </div>
+    <div class="actions">${pharmacyActionButton(o,st)}</div>
+  </article>`;
+}
+
+function itemsBlock(o,items){
+  if(!items.length)return '<div class="empty-items">لا توجد أصناف واضحة</div>';
+  return `<button class="show-items" onclick="showItemsModal('${esc(String(o.id))}')">عرض قائمة الأصناف</button>`;
+}
+
+function preparerName(o){return clean(o.pharmacy_preparing_by||o.pharmacy_prepared_by||o.prepared_by||"")}
+function pharmacyActionButton(o,st){
+  const ids=esc(idsText(o));
+  if(st==="prepared")return `<button class="action back" onclick="setPrepared('${ids}',false)">رجوع لجديد</button>`;
+  if(st==="preparing")return `<button class="action finish" onclick="setPrepared('${ids}',true)">تم التحضير</button>`;
+  return `<button class="action prepare-start" onclick="showPreparerModal('${ids}')">جاري التحضير</button>`;
+}
+function showPreparerModal(ids){
+  document.getElementById("preparerModalTitle").textContent="اختار اللي هيحضّر الأوردر";
+  document.getElementById("preparerModalBody").innerHTML=`<div class="preparer-grid">${PHARMACY_PREPARERS.map(n=>`<button class="preparer-btn" onclick="setPreparing('${esc(ids)}','${esc(n)}')">${esc(n)}</button>`).join("")}</div>`;
+  document.getElementById("preparerModal").classList.add("show");
+  lockPageScroll();
+}
+function hidePreparerModal(){
+  document.getElementById("preparerModal").classList.remove("show");
+  if(!document.getElementById("itemsModal").classList.contains("show"))unlockPageScroll();
+}
+function closePreparerModal(e){if(e.target&&e.target.id==="preparerModal")hidePreparerModal()}
+async function setPreparing(ids,name){
+  try{
+    const list=String(ids||"").split(",").map(x=>x.trim()).filter(Boolean);
+    if(!list.length)return toast("تعذر تحديد الطلب");
+    const now=new Date().toISOString();
+    const payload={pharmacy_status:"preparing",pharmacy_preparing_by:name,pharmacy_preparing_at:now};
+    const check=await fetch(SB_URL+"/rest/v1/orders?id=in.("+list.map(encodeURIComponent).join(",")+")&select=id,pharmacy_status,pharmacy_preparing_by",{headers:SB_HEADERS});
+    if(check.ok){
+      const rows=await check.json();
+      const taken=(rows||[]).find(r=>{
+        const s=String(r.pharmacy_status||"").toLowerCase();
+        return (s==="preparing"||s==="done"||s==="prepared") && clean(r.pharmacy_preparing_by||"") && clean(r.pharmacy_preparing_by)!==name;
+      });
+      if(taken){toast("الأوردر ده ماسكه بالفعل: "+clean(taken.pharmacy_preparing_by)); hidePreparerModal(); await loadOrders(); return;}
+    }
+    const results=await Promise.all(list.map(id=>fetch(SB_URL+"/rest/v1/orders?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:SB_HEADERS,body:JSON.stringify(payload)})));
+    if(results.some(r=>!r.ok))throw new Error("patch failed");
+    orders.forEach(o=>{if((o._ids||[String(o.id)]).some(id=>list.includes(String(id)))){o.pharmacy_status="preparing";o.pharmacy_preparing_by=name;o.pharmacy_preparing_at=now}});
+    hidePreparerModal();
+    activeStatus="preparing";
+    render();
+    toast("تم تعيين التحضير: "+name);
+  }catch(e){console.error(e);toast("تعذر تعيين التحضير. شغّل SQL لو أول مرة")}
+}
+
+let modalScrollY=0;
+function lockPageScroll(){
+  modalScrollY=window.scrollY||document.documentElement.scrollTop||0;
+  document.documentElement.classList.add("modal-open");
+  document.body.classList.add("modal-open");
+  document.body.style.position="fixed";
+  document.body.style.top="-"+modalScrollY+"px";
+  document.body.style.left="0";
+  document.body.style.right="0";
+  document.body.style.width="100%";
+}
+function unlockPageScroll(){
+  document.documentElement.classList.remove("modal-open");
+  document.body.classList.remove("modal-open");
+  document.body.style.position="";
+  document.body.style.top="";
+  document.body.style.left="";
+  document.body.style.right="";
+  document.body.style.width="";
+  window.scrollTo(0,modalScrollY||0);
+}
+function showItemsModal(id){
+  const sid=String(id);
+  const all=[...shownOrders,...orders];
+  const o=all.find(x=>String(x.id)===sid||(x._ids||[]).map(String).includes(sid));
+  if(!o){toast("تعذر فتح قائمة الأصناف");return}
+  const items=getItems(o);
+  document.getElementById("itemsModalTitle").textContent="أصناف طلب #"+arNum(o.id);
+  document.getElementById("itemsModalBody").innerHTML=items.length?items.map((it,i)=>modalItemRow(it,i)).join(""):'<div class="empty-items">لا توجد أصناف واضحة</div>';
+  document.getElementById("itemsModal").classList.add("show");
+  lockPageScroll();
+}
+function modalItemRow(it,index){
+  const name=clean(it.name||it.product_name||it.title||"صنف بدون اسم");
+  const qty=it.qty||it.quantity||it.count||1;
+  const price=Number(it.price||it.unit_price||0);
+  const priceHtml=price?`<div class="modal-price">سعر المنتج: ${esc(arNum(price))} ج</div>`:"";
+  return `<div class="modal-item"><div class="modal-num">${esc(arNum((index||0)+1))}</div><div class="modal-item-name">${esc(name)}${priceHtml}</div><div class="modal-qty">العدد: ${esc(arNum(qty))}</div></div>`;
+}
+function hideItemsModal(){
+  document.getElementById("itemsModal").classList.remove("show");
+  unlockPageScroll();
+}
+function closeItemsModal(e){
+  if(e.target&&e.target.id==="itemsModal")hideItemsModal();
+}
+
+function branchCode(branch){
+  const b=String(branch||"").toLowerCase();
+  if(b.includes("2")||b.includes("sc2"))return"61";
+  if(b.includes("self care"))return"72";
+  return"";
+}
+
+function itemRow(it){
+  const name=clean(it.name||it.product_name||it.title||"صنف بدون اسم");
+  const qty=it.qty||it.quantity||it.count||1;
+  return `<div class="item"><div class="item-name">${esc(name)}</div><div class="qty">العدد: ${esc(arNum(qty))}</div></div>`;
+}
+
+function getItems(o){
+  let it=o.items;
+  if(typeof it==="string"){try{it=JSON.parse(it)}catch(e){it=[]}}
+  if(Array.isArray(it))return it;
+  return [];
+}
+
+function idsText(o){return (o._ids&&o._ids.length?o._ids:[o.id]).map(String).join(",")}
+function dedupeOrders(rows){
+  const groups=[];
+  rows.forEach(o=>{
+    const day=effectiveDay(o);
+    if(day!=="today"&&day!=="tomorrow")return;
+    const match=groups.find(x=>samePharmacyDuplicate(x,o));
+    if(!match){
+      o._ids=[String(o.id)];
+      groups.push(o);
+      return;
+    }
+    const ids=[...(match._ids||[String(match.id)]),String(o.id),...(o._ids||[])].filter(Boolean).map(String);
+    const uniqueIds=[...new Set(ids)];
+    const chosen=betterPharmacyDuplicate(match,o);
+    if(chosen===match){
+      match._ids=uniqueIds;
+    }else{
+      o._ids=uniqueIds;
+      groups[groups.indexOf(match)]=o;
+    }
+  });
+  return groups;
+}
+function duplicateKey(o){return [clean(o.hotel).toLowerCase(),clean(o.room).toLowerCase(),clean(o.delivery_day).toLowerCase(),clean(o.delivery_date||o.order_date||o.date),clean(o.delivery_time),clean(o.payment).toLowerCase(),clean(o.total),clean(o.branch).toLowerCase(),itemsKey(o)].join("|")}
+function itemsKey(o){return getItems(o).map(x=>clean(x.name||x.product_name||x.title).toLowerCase()+":"+clean(x.qty||x.quantity||x.count||1)).join(",")}
+function samePharmacyDuplicate(a,b){
+  const pa=phoneKey(a);
+  const pb=phoneKey(b);
+  if(!pa||!pb||pa!==pb)return false;
+  if(orderHourKey(a)!==orderHourKey(b))return false;
+  if(duplicateKey(a)===duplicateKey(b))return true;
+  return itemsSimilarity(a,b)>=0.8;
+}
+function orderHourKey(o){
+  const d=new Date(o.created_at||o.order_created_at||o.inserted_at||o.updated_at||0);
+  if(isNaN(d.getTime()))return "";
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")+"-"+String(d.getHours()).padStart(2,"0");
+}
+function betterPharmacyDuplicate(a,b){
+  const rank={new:0,preparing:1,prepared:2};
+  const ra=rank[pharmacyStatus(a)]??0;
+  const rb=rank[pharmacyStatus(b)]??0;
+  if(rb>ra)return b;
+  if(rb<ra)return a;
+  const ta=new Date(a.created_at||0).getTime()||0;
+  const tb=new Date(b.created_at||0).getTime()||0;
+  return tb>ta?b:a;
+}
+function phoneKey(o){
+  const d=searchDigits(o.customer_phone||o.phone||"");
+  if(!d)return"";
+  return d.length>10?d.slice(-10):d;
+}
+function itemTokensForDuplicate(o){
+  return [...new Set(getItems(o).map(x=>normalizeDuplicateItemName(x.name||x.product_name||x.title)).filter(Boolean))];
+}
+function normalizeDuplicateItemName(v){
+  return normalize(String(v||"").replace(/\d+\s*(mg|ml|g|gm|mcg|pcs|tablets?|capsules?|sachets?|cream|gel|spray|drops?)/gi," ")).replace(/\s+/g," ").trim();
+}
+function itemsSimilarity(a,b){
+  const A=itemTokensForDuplicate(a);
+  const B=itemTokensForDuplicate(b);
+  if(!A.length||!B.length)return 0;
+  const setB=new Set(B);
+  const common=A.filter(x=>setB.has(x)).length;
+  return common/Math.max(A.length,B.length);
+}
+
+async function patchOrderIds(list,payload){
+  const results=await Promise.all(list.map(id=>fetch(SB_URL+"/rest/v1/orders?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:SB_HEADERS,body:JSON.stringify(payload)})));
+  const failed=results.find(r=>!r.ok);
+  if(failed)throw new Error(await failed.text());
+}
+function resetPayloadForOrder(o){
+  const payload={pharmacy_status:"new"};
+  ["pharmacy_prepared_at","pharmacy_preparing_by","pharmacy_preparing_at","pharmacy_prepared_by","prepared_at","prepared_by"].forEach(k=>{
+    if(o&&Object.prototype.hasOwnProperty.call(o,k))payload[k]=null;
+  });
+  return payload;
+}
+function finishPayloadForOrder(o,now,preparedBy){
+  const payload={pharmacy_status:"done"};
+  if(o&&Object.prototype.hasOwnProperty.call(o,"pharmacy_prepared_at"))payload.pharmacy_prepared_at=now;
+  if(preparedBy&&o&&Object.prototype.hasOwnProperty.call(o,"pharmacy_prepared_by"))payload.pharmacy_prepared_by=preparedBy;
+  return payload;
+}
+async function setPrepared(ids,isPrepared){
+  try{
+    const list=String(ids||"").split(",").map(x=>x.trim()).filter(Boolean);
+    if(!list.length)return toast("تعذر تحديد الطلب");
+    const first=orders.find(o=>(o._ids||[String(o.id)]).some(id=>list.includes(String(id))));
+    const now=new Date().toISOString();
+    if(isPrepared){
+      const preparedBy=preparerName(first||{})||"";
+      const payload=finishPayloadForOrder(first||{},now,preparedBy);
+      await patchOrderIds(list,payload);
+      orders.forEach(o=>{if((o._ids||[String(o.id)]).some(id=>list.includes(String(id)))){o.pharmacy_status="done";o.pharmacy_prepared_at=now;if(preparedBy)o.pharmacy_prepared_by=preparedBy}});
+      render();
+      toast("تم تسجيل التحضير");
+    }else{
+      const payload=resetPayloadForOrder(first||{});
+      await patchOrderIds(list,payload);
+      orders.forEach(o=>{if((o._ids||[String(o.id)]).some(id=>list.includes(String(id)))){o.pharmacy_status="new";o.pharmacy_prepared_at=null;o.pharmacy_preparing_by=null;o.pharmacy_preparing_at=null;o.pharmacy_prepared_by=null;o.prepared_at=null;o.prepared_by=null}});
+      activeStatus="new";
+      render();
+      toast("تم الرجوع لجديد");
+      setTimeout(loadOrders,500);
+    }
+  }catch(e){
+    console.error(e);
+    toast("تعذر حفظ التغيير. راجع SQL أو صلاحيات Supabase");
+    setTimeout(loadOrders,500);
+  }
+}
+
+async function updatePreparedTime(list,isPrepared){
+  const payload={pharmacy_prepared_at:isPrepared?new Date().toISOString():null};
+  try{
+    await Promise.all(list.map(id=>fetch(SB_URL+"/rest/v1/orders?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:SB_HEADERS,body:JSON.stringify(payload)})));
+  }catch(e){}
+}
+
+function searchDigits(v){return String(v||"").replace(/[٠-٩]/g,d=>String("٠١٢٣٤٥٦٧٨٩".indexOf(d))).replace(/[۰-۹]/g,d=>String("۰۱۲۳۴۵۶۷۸۹".indexOf(d))).replace(/[^0-9]/g,"")}
+function pharmacySearchPass(o){
+  if(!pharmacySearch)return true;
+  const q=normalize(pharmacySearch.replace(/^#+/,""));
+  const qDigits=searchDigits(pharmacySearch);
+  const orderIds=[o.id,...(o._ids||[])].map(x=>String(x||""));
+  const hotel=normalize(hotelArName(o.hotel)+" "+clean(o.hotel));
+  const orderMatch=qDigits?orderIds.some(x=>searchDigits(x).includes(qDigits)):orderIds.some(x=>normalize(x).includes(q));
+  const hotelMatch=q?hotel.includes(q):false;
+  return orderMatch||hotelMatch;
+}
+
+function showInPharmacy(o){
+  if(isDraftOrder(o)||isCancelledOrder(o))return false;
+  if(pharmacyStatus(o)!=="prepared")return true;
+  return !preparedExpired(o);
+}
+function filterCancelledGroups(rows){
+  const arr=(Array.isArray(rows)?rows:[]).filter(o=>!isDraftOrder(o));
+  const cancelledKeys=new Set(arr.filter(isCancelledOrder).map(duplicateKey));
+  return arr.filter(o=>!isCancelledOrder(o)&&!cancelledKeys.has(duplicateKey(o)));
+}
+function isDraftOrder(o){
+  const s=String(o.status||"").trim().toLowerCase();
+  const os=String(o.order_status||"").trim().toLowerCase();
+  return s.includes("draft")||s.includes("pendingwhatsapp")||os.includes("draft")||os.includes("pendingwhatsapp");
+}
+function isCancelledOrder(o){
+  const vals=[o.status,o.order_status,o.state,o.admin_status,o.main_status,o.cancel_status,o.delivery_status,o.pharmacy_status];
+  const flags=[o.cancelled,o.canceled,o.is_cancelled,o.is_canceled,o.order_cancelled,o.deleted];
+  const hasStatus=vals.some(v=>{
+    const s=String(v??"").trim().toLowerCase();
+    return s==="cancelled"||s==="canceled"||s==="cancel"||s==="cancelled_by_admin"||s==="canceled_by_admin"||s.includes("cancel")||s==="ملغي"||s==="ملغى";
+  });
+  const hasFlag=flags.some(v=>v===true||String(v??"").trim().toLowerCase()==="true");
+  return hasStatus||hasFlag||!!o.cancelled_at||!!o.canceled_at;
+}
+function preparedExpired(o){
+  const t=preparedTime(o);
+  if(!t)return false;
+  return Date.now()-t>48*60*60*1000;
+}
+function preparedTime(o){
+  const candidates=[
+    o.pharmacy_prepared_at,
+    o.pharmacy_done_at,
+    o.prepared_at,
+    o.updated_at,
+    o.created_at
+  ];
+  for(const v of candidates){
+    if(!v)continue;
+    const d=new Date(v).getTime();
+    if(!isNaN(d))return d;
+  }
+  return 0;
+}
+function pharmacyStatus(o){const s=String(o.pharmacy_status||"").toLowerCase();if(s==="done"||s==="prepared")return"prepared";if(s==="preparing"||s==="in_progress"||s==="working")return"preparing";return"new"}
+function effectiveDate(o){const direct=parseOrderDate(o.delivery_date||o.order_date||o.date||o.delivery_day);if(direct)return direct;const base=o.created_at?new Date(o.created_at):new Date();const d=new Date(base.getFullYear(),base.getMonth(),base.getDate());if(isTomorrowWord(o.delivery_day))d.setDate(d.getDate()+1);return d}
+function effectiveDay(o){const e=effectiveDate(o);const now=new Date();const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());const tomorrow=new Date(today);tomorrow.setDate(today.getDate()+1);if(sameDay(e,today))return"today";if(sameDay(e,tomorrow))return"tomorrow";return"other"}
+function parseOrderDate(v){const s=String(v||"").trim();if(!s)return null;if(isTomorrowWord(s)||/today|اليوم|النهاردة|dnes/i.test(s))return null;let m=s.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})/);if(m){const d=new Date(+m[1],+m[2]-1,+m[3]);return isNaN(d)?null:d}m=s.match(/^(\d{1,2})[-\/.](\d{1,2})[-\.\/](\d{2,4})$/);if(m){let y=+m[3];if(y<100)y+=2000;const d=new Date(y,+m[2]-1,+m[1]);return isNaN(d)?null:d}return null}
+function sameDay(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate()}
+function isTomorrowWord(v){return /tomorrow|zítra|zitra|завтра|morgen|b morgen|بكرة|غدا|غدًا/i.test(String(v||""))}
+function sortOrders(a,b){const sa=pharmacyStatus(a)==="new"?0:1;const sb=pharmacyStatus(b)==="new"?0:1;if(sa!==sb)return sa-sb;return timeMinutes(a.delivery_time)-timeMinutes(b.delivery_time)}
+function timeMinutes(t){
+  const s=String(t||"").trim();
+  let m=s.match(/(\d{1,2}):(\d{2})/);
+  if(m) return parseInt(m[1],10)*60+parseInt(m[2],10);
+  m=s.match(/(?:\b(AM|PM)\s*)?(\d{1,2})(?:\s*(AM|PM|ص|م|صباحًا|صباحا|مساءً|مساء))?/i);
+  if(!m) return 9999;
+  let h=parseInt(m[2],10);
+  const tag=String(m[1]||m[3]||"").toLowerCase();
+  if(/pm|م|مساء/.test(tag) && h<12) h+=12;
+  if(/am|ص|صباح/.test(tag) && h===12) h=0;
+  return h*60;
+}
+function readyBefore(o){const mins=timeMinutes(o.delivery_time);if(mins===9999)return"";let v=mins-60;if(v<0)v+=1440;const h=Math.floor(v/60);const m=String(v%60).padStart(2,"0");return ar12(`${String(h).padStart(2,"0")}:${m}`)}
+function formatDateAr(d){if(!(d instanceof Date)||isNaN(d))return"غير محدد";const days=["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];const months=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];return days[d.getDay()]+"، "+arNum(d.getDate())+" "+months[d.getMonth()]+" "+arNum(d.getFullYear())}
+function ar12(t){
+  const mins=timeMinutes(t);
+  if(mins===9999) return clean(t);
+  let h=Math.floor(mins/60);
+  const min=String(mins%60).padStart(2,"0");
+  const suf=h<12?"ص":"م";
+  let h12=h%12; if(h12===0)h12=12;
+  return arNum(h12+":"+min+" "+suf);
+}
+function amountHtml(o){
+  const egpValue=numberFrom(o.total_egp||o.egp_total||o.total);
+  if(!egpValue)return"غير محدد";
+  const parts=[pill(formatMoney(egpValue)+" جنيه","main")];
+  if(!isCashPayment(o.payment))return '<div class="amount-pills">'+parts.join("")+'</div>';
+  const code=branchCode(o.branch);
+  if(code==="61"){
+    parts.push(pill(formatMoney(Math.ceil(egpValue/GBP_RATE))+" استرليني","gbp"));
+  }else{
+    parts.push(pill(formatMoney(Math.ceil(egpValue/USD_RATE))+" دولار","usd"));
+    parts.push(pill(formatMoney(Math.ceil(egpValue/EUR_RATE))+" يورو","eur"));
+  }
+  return '<div class="amount-pills">'+parts.join("")+'</div>';
+}
+function isCashPayment(p){
+  const x=clean(p).toLowerCase();
+  if(!x)return false;
+  if(/visa|card|كارت|فيزا|pos|karta|карт/.test(x))return false;
+  return /cash|كاش|نقد|hotov|bar|нал|готів|عند الاستلام|استلام/.test(x);
+}
+function pill(text,cls){
+  return '<span class="amount-pill '+cls+'">'+esc(arNum(text))+'</span>';
+}
+function hasDeliveryFeeField(o){
+  return ["delivery_fee","deliveryFee","delivery_cost","deliveryCost","delivery_amount","deliveryAmount","shipping_fee","shippingFee"].some(k=>o&&o[k]!==undefined&&o[k]!==null&&String(o[k]).trim()!=="");
+}
+function deliveryFeeValue(o){
+  return numberFrom(o.delivery_fee||o.deliveryFee||o.delivery_cost||o.deliveryCost||o.delivery_amount||o.deliveryAmount||o.shipping_fee||o.shippingFee);
+}
+function deliveryFeeHtml(o){
+  if(!hasDeliveryFeeField(o)) return '<div class="amount-pills">'+pill("غير محدد","warn")+'</div>';
+  return '<div class="amount-pills">'+pill(formatMoney(deliveryFeeValue(o))+" جنيه","main")+'</div>';
+}
+function numberFrom(v){
+  const s=String(v??"").replace(/[^\d.]/g,"");
+  const n=parseFloat(s);
+  return isNaN(n)?0:n;
+}
+function formatMoney(n){
+  return String(Math.round(n));
+}
+function paymentAr(p){const s=clean(p);if(!s)return"غير محدد";const x=s.toLowerCase();if(/cash|كاش|نقد|hotov|bar|нал|готів/.test(x))return"كاش عند الاستلام";if(/visa|card|كارت|فيزا|pos|karta|карт/.test(x))return"كارت / فيزا";if(/paid|مدفوع|prepaid|محول|transfer|insta|instapay|vodafone/.test(x))return"مدفوع مسبقًا";return arNum(s)}
+function hotelArName(name){const original=clean(name);if(!original)return"فندق غير محدد";return HOTEL_LOOKUP[normalize(original)]||original}
+function normalize(s){return String(s||"").toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g,"").replace(/&/g,"and").replace(/[^a-z0-9а-яёء-ي]+/gi," ").replace(/\s+/g," ").trim()}
+function clean(v){return String(v??"").replace(/<[^>]*>/g,"").trim()}
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]))}
+function arNum(v){return String(v??"").replace(/\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[d])}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>t.classList.remove("show"),2200)}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")hideItemsModal()});
+init();
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>{
+    navigator.serviceWorker.register("sw.js").then(reg=>{
+      reg.update();
+      reg.addEventListener("updatefound", ()=>{
+        const nw = reg.installing;
+        if(nw){ nw.addEventListener("statechange", ()=>{
+          if(nw.state==="installed" && navigator.serviceWorker.controller){
+            nw.postMessage("skipWaiting");
+          }
+        }); }
+      });
+    }).catch(()=>{});
+    let refreshing=false;
+    navigator.serviceWorker.addEventListener("controllerchange", ()=>{
+      if(refreshing) return; refreshing=true; location.reload();
+    });
+  });
+}
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDWnqH3oR9IkxarG-pW9za4dHZVsJ5-qBI",
+  authDomain: "self-care-487ca.firebaseapp.com",
+  projectId: "self-care-487ca",
+  storageBucket: "self-care-487ca.firebasestorage.app",
+  messagingSenderId: "555397036454",
+  appId: "1:555397036454:web:83f472588229bbee76b767"
+};
+const VAPID_KEY = "BBvqY12fzttPc2BB0QTdhGM9_ZJjgivtkmUIBs4tMwlUl-n3H_FkaTMxiSgNeC-YH1dsQKaDbUdnfe9WQEcRHys";
+const PUSH_ROLE = "pharmacy";
+function pushKeyFromPayload(payload){
+  const d = (payload && payload.data) || {};
+  const n = (payload && payload.notification) || {};
+  return String(d.order_id || d.orderId || d.id || d.order_no || d.orderNo || n.tag || ((n.title||"") + "|" + (n.body||""))).replace(/\s+/g," ").trim().slice(0,180) || ("selfcare-order-" + Date.now());
+}
+function pushRecentlyShown(key){
+  const storageKey = "selfcare_recent_push_" + PUSH_ROLE + "_" + key;
+  const now = Date.now();
+  const last = Number(sessionStorage.getItem(storageKey) || 0);
+  if(last && now - last < 30000) return true;
+  sessionStorage.setItem(storageKey, String(now));
+  return false;
+}
+async function savePushToken(token){
+  const q = SB_URL + "/rest/v1/push_tokens?select=id&token=eq." + encodeURIComponent(token) + "&role=eq." + encodeURIComponent(PUSH_ROLE) + "&limit=1";
+  const check = await fetch(q, {headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY}});
+  if(check.ok){
+    const rows = await check.json();
+    if(Array.isArray(rows) && rows.length) return true;
+  }
+  const saveRes = await fetch(SB_URL+"/rest/v1/push_tokens", {
+    method:"POST",
+    headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},
+    body:JSON.stringify({ token: token, role: PUSH_ROLE })
+  });
+  return saveRes.ok || saveRes.status === 409;
+}
+async function setupPush(){
+  try{
+    if(!("Notification" in window) || !("serviceWorker" in navigator) || typeof firebase==="undefined" || !firebase.messaging) return;
+    if(!firebase.apps || !firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    const messaging = firebase.messaging();
+    const perm = await Notification.requestPermission();
+    if(perm !== "granted") return;
+    const reg = await navigator.serviceWorker.ready;
+    const token = await messaging.getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
+    if(!token) return;
+    await savePushToken(token);
+    localStorage.setItem("selfcare_push_token_" + PUSH_ROLE, token);
+    if(!window.__selfcareOnMessageReady && messaging.onMessage){
+      window.__selfcareOnMessageReady = true;
+      messaging.onMessage((payload)=>{
+        try{
+          const n = (payload && payload.notification) || {};
+          const d = (payload && payload.data) || {};
+          const key = pushKeyFromPayload(payload);
+          if(pushRecentlyShown(key)) return;
+          reg.showNotification(n.title || d.title || "🔔 طلب جديد", {
+            body: n.body || d.body || "وصل طلب جديد",
+            icon: "icon-192.png",
+            badge: "icon-192.png",
+            vibrate: [200,100,200],
+            tag: "selfcare-order-" + key,
+            renotify: false,
+            data: { url: "./", key }
+          });
+        }catch(_){}
+      });
+    }
+  }catch(e){}
+}
+window.addEventListener("load", ()=>{ setTimeout(setupPush, 1200); });
+</script>
+</body>
+</html>
