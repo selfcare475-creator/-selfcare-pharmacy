@@ -1,8 +1,8 @@
 name: Deploy to Cloudflare Pages
 
-# NOTE: auto-deploy on push is intentionally disabled until sw.js + icons are
-# added and the CLOUDFLARE_API_TOKEN secret is set. Then re-enable `push`.
 on:
+  push:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
