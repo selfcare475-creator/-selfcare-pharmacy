@@ -265,6 +265,28 @@ html.modal-open, body.modal-open{
 </style>
 </head>
 <body>
+<style id="pharmacy-login-gate-css">
+#scGate{position:fixed;inset:0;z-index:99999;background:#0b1220;display:flex;align-items:center;justify-content:center;padding:20px}
+#scGate.hide{display:none}
+#scGate form{width:100%;max-width:320px;background:#111a2b;border:1px solid #26344d;border-radius:20px;padding:26px 20px;text-align:center;box-shadow:0 26px 54px rgba(0,0,0,.42)}
+#scGate h2{margin:0 0 6px;font-size:20px;color:#eef6ff}
+#scGate p{margin:0 0 18px;font-size:13px;color:#9aa8bd}
+#scGate input{width:100%;height:52px;border-radius:14px;border:1px solid #2f4261;background:#08111f;color:#eef6ff;font-size:24px;text-align:center;letter-spacing:8px;outline:none;font-family:inherit}
+#scGate input:focus{border-color:#14b8a6}
+#scGate button{width:100%;height:50px;margin-top:12px;border-radius:14px;background:#14b8a6;color:#04201c;font-size:16px;font-weight:800}
+#scGate button:disabled{opacity:.6}
+#scGateErr{min-height:20px;margin-top:10px;font-size:13px;color:#ef4444}
+</style>
+<div id="scGate" dir="rtl">
+  <form id="scGateForm" autocomplete="off">
+    <h2>Self care pharmacy</h2>
+    <p>اكتب الباسورد عشان تفتح الداشبورد</p>
+    <input id="scGatePwd" type="password" inputmode="numeric" autocomplete="off" aria-label="الباسورد">
+    <button type="submit" id="scGateBtn">دخول</button>
+    <div id="scGateErr"></div>
+  </form>
+</div>
+<script>try{if(localStorage.getItem("sc_pharmacy_session"))document.getElementById("scGate").classList.add("hide")}catch(e){}</script>
 <div class="top">
   <div class="head">
     <div class="logo">
@@ -1325,7 +1347,42 @@ function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&l
 function arNum(v){return String(v??"").replace(/\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[d])}
 function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>t.classList.remove("show"),2200)}
 document.addEventListener("keydown",e=>{if(e.key==="Escape")hideItemsModal()});
-init();
+// ---- قفل الداشبورد بالباسورد ----
+// الباسورد بيتراجع من السيرفر (sc_dashboard_login). لو رقم pharmacy_session_ver في الإعدادات اتغيّر، كل الأجهزة بتطلع وتطلب الباسورد تاني.
+const SC_GATE_KEY="sc_pharmacy_session";
+let scGateStarted=false;
+function scGateGet(){try{return localStorage.getItem(SC_GATE_KEY)||""}catch(e){return ""}}
+function scGateSet(v){try{if(v)localStorage.setItem(SC_GATE_KEY,v);else localStorage.removeItem(SC_GATE_KEY)}catch(e){}}
+function scGateOpen(){document.getElementById("scGate").classList.add("hide");if(!scGateStarted){scGateStarted=true;init()}}
+function scGateLock(){scGateSet("");if(scGateStarted){location.reload();return}const g=document.getElementById("scGate");g.classList.remove("hide");const i=document.getElementById("scGatePwd");if(i)i.focus()}
+async function scGateCheck(){
+  const mine=scGateGet();
+  if(!mine)return;
+  try{
+    const r=await fetch(SB_URL+"/rest/v1/settings?select=value&key=eq.pharmacy_session_ver",{headers:SB_HEADERS,cache:"no-store"});
+    if(!r.ok)return;
+    const rows=await r.json();
+    const ver=rows&&rows[0]?String(rows[0].value||""):"";
+    if(ver&&ver!==mine)scGateLock();
+  }catch(e){}
+}
+document.getElementById("scGateForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const inp=document.getElementById("scGatePwd"),btn=document.getElementById("scGateBtn"),err=document.getElementById("scGateErr");
+  const pwd=inp.value.trim();
+  if(!pwd)return;
+  btn.disabled=true;err.textContent="";
+  try{
+    const r=await fetch(SB_URL+"/rest/v1/rpc/sc_dashboard_login",{method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_role:"pharmacy",p_pwd:pwd})});
+    const ver=r.ok?await r.json():null;
+    if(ver){scGateSet(String(ver));inp.value="";scGateOpen()}
+    else{err.textContent=r.ok?"الباسورد غلط":"حصلت مشكلة في الاتصال، جرّب تاني";inp.value="";inp.focus()}
+  }catch(_){err.textContent="حصلت مشكلة في الاتصال، جرّب تاني"}
+  btn.disabled=false;
+});
+if(scGateGet()){scGateOpen();scGateCheck()}else{scGateLock()}
+setInterval(scGateCheck,120000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)scGateCheck()});
 if("serviceWorker" in navigator){
   window.addEventListener("load", ()=>{
     navigator.serviceWorker.register("sw.js").then(reg=>{
