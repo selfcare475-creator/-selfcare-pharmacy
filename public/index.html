@@ -1375,7 +1375,7 @@ document.getElementById("scGateForm").addEventListener("submit",async e=>{
   try{
     const r=await fetch(SB_URL+"/rest/v1/rpc/sc_dashboard_login",{method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_role:"pharmacy",p_pwd:pwd})});
     const ver=r.ok?await r.json():null;
-    if(ver){scGateSet(String(ver));inp.value="";scGateOpen()}
+    if(ver){scGateSet(String(ver));inp.value="";scGateOpen();setTimeout(()=>{try{setupPush()}catch(_){}} ,1200)}
     else{err.textContent=r.ok?"الباسورد غلط":"حصلت مشكلة في الاتصال، جرّب تاني";inp.value="";inp.focus()}
   }catch(_){err.textContent="حصلت مشكلة في الاتصال، جرّب تاني"}
   btn.disabled=false;
@@ -1473,7 +1473,8 @@ async function setupPush(){
     }
   }catch(e){}
 }
-window.addEventListener("load", ()=>{ setTimeout(setupPush, 1200); });
+// الإشعارات بتتسجل للجهاز بعد ما يدخل بالباسورد بس
+window.addEventListener("load", ()=>{ if(scGateStarted) setTimeout(setupPush, 1200); });
 </script>
 </body>
 </html>
