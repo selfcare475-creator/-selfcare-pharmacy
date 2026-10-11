@@ -943,7 +943,7 @@ function card(o){
   const room=clean(o.room);
   const dateText=formatDateAr(effectiveDate(o));
   const ready=readyBefore(o);
-  const code=branchCode(o.branch);
+  const code=branchCode(o.branch,o);
   return `<article class="card">
     <div class="card-inner">
       <div class="row-top">
@@ -1068,7 +1068,8 @@ function closeItemsModal(e){
   if(e.target&&e.target.id==="itemsModal")hideItemsModal();
 }
 
-function branchCode(branch){
+function branchCode(branch,o){
+  if(o&&Number(o.source_code)===51)return"51";
   const b=String(branch||"").toLowerCase();
   if(b.includes("2")||b.includes("sc2"))return"61";
   if(b.includes("self care"))return"72";
@@ -1303,7 +1304,7 @@ function amountHtml(o){
   if(!egpValue)return"غير محدد";
   const parts=[pill(formatMoney(egpValue)+" جنيه","main")];
   if(!isCashPayment(o.payment))return '<div class="amount-pills">'+parts.join("")+'</div>';
-  const code=branchCode(o.branch);
+  const code=branchCode(o.branch,o);
   if(code==="61"){
     parts.push(pill(formatMoney(Math.ceil(egpValue/GBP_RATE))+" استرليني","gbp"));
   }else{
