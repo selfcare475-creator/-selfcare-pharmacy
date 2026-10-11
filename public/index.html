@@ -1477,5 +1477,64 @@ async function setupPush(){
 // الإشعارات بتتسجل للجهاز بعد ما يدخل بالباسورد بس
 window.addEventListener("load", ()=>{ if(scGateStarted) setTimeout(setupPush, 1200); });
 </script>
+<style id="pharmacy-scooter-css">
+.card.scooter-card{background:linear-gradient(180deg,#2a1747,#1d1233)!important;border:2px solid #a78bfa!important;box-shadow:0 0 0 3px rgba(167,139,250,.18),0 20px 40px rgba(0,0,0,.4)!important}
+.scooter-card .code{color:#e9d5ff}
+.scooter-badge{background:#7c3aed;color:#fff;border:1px solid #a78bfa;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:1000;white-space:nowrap}
+.scooter-card .label{color:#c4b5fd}
+.scooter-items{margin-top:6px;background:rgba(167,139,250,.14);border:1px dashed #a78bfa;border-radius:12px;padding:8px 10px;color:#f5f3ff;font-weight:900;font-size:13px;line-height:1.5}
+</style>
+<script id="pharmacy-scooter-js">
+/* Scooter / wheelchair rental bookings: purple card + chime in the pharmacy dashboard */
+(function(){
+  var scoot=[], seen=null, actx=null;
+  function cairoDate(off){var d=new Date(Date.now()+3*3600e3); d.setUTCDate(d.getUTCDate()+(off||0)); return d.toISOString().slice(0,10);}
+  function chime(){
+    try{
+      actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+      if(actx.state==="suspended")actx.resume();
+      [0,0.35,0.7].forEach(function(t,i){var o=actx.createOscillator(),g=actx.createGain();o.type="sine";o.frequency.value=[880,1175,1568][i];
+        g.gain.setValueAtTime(0.0001,actx.currentTime+t);g.gain.exponentialRampToValueAtTime(0.5,actx.currentTime+t+0.03);g.gain.exponentialRampToValueAtTime(0.0001,actx.currentTime+t+0.3);
+        o.connect(g);g.connect(actx.destination);o.start(actx.currentTime+t);o.stop(actx.currentTime+t+0.32);});
+    }catch(e){}
+  }
+  document.addEventListener("click",function(){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();actx.resume();}catch(e){}},{once:true});
+  function slot12(s){var m=String(s||"").match(/^(\d{1,2}):(\d{2})/);if(!m)return s||"غير محدد";var h=+m[1],ap=h>=12?"م":"ص";h=h%12||12;return arNum(h+":"+m[2])+" "+ap;}
+  function dayLabel(d){return d===cairoDate(0)?"النهارده":d===cairoDate(1)?"بكره":d===cairoDate(-1)?"امبارح":d;}
+  function scootCard(b){
+    return '<article class="card scooter-card"><div class="card-inner">'+
+      '<div class="row-top"><div class="order-head"><div class="code">🛴 حجز '+esc(b.code||"")+'</div></div>'+
+      '<div class="scooter-badge">'+(b.status==="confirmed"?"اسكوتر · مؤكد":"اسكوتر · جديد")+'</div></div>'+
+      '<div class="info">'+
+      '<div class="info-row"><div class="label">الفندق</div><div class="value">'+esc(b.hotel||"غير محدد")+(b.room?(' · غرفة '+esc(b.room)):'')+'</div></div>'+
+      '<div class="info-row"><div class="label">التوصيل</div><div class="value">'+esc(dayLabel(String(b.start_date)))+' · '+esc(slot12(b.delivery_slot))+'</div></div>'+
+      '<div class="info-row"><div class="label">المدة</div><div class="value">'+esc(arNum(b.days||""))+' يوم · لحد '+esc(String(b.end_date||""))+'</div></div>'+
+      (b.zone_name?'<div class="info-row"><div class="label">المنطقة</div><div class="value">'+esc(b.zone_name)+'</div></div>':'')+
+      '</div>'+(b.items?'<div class="scooter-items">'+esc(b.items)+'</div>':'')+
+      '</div></article>';
+  }
+  async function loadScoot(){
+    try{
+      var r=await fetch(SB_URL+"/rest/v1/rpc/pharmacy_scooter_bookings",{method:"POST",headers:SB_HEADERS,body:"{}"});
+      if(!r.ok)return; var d=await r.json(); scoot=Array.isArray(d)?d:[];
+      var codes=scoot.map(function(b){return b.code;});
+      if(seen!==null && codes.some(function(c){return seen.indexOf(c)<0;})){chime();if(typeof toast==="function")toast("🛴 وصل حجز اسكوتر جديد");}
+      seen=codes; paint();
+    }catch(e){}
+  }
+  function paint(){
+    var list=document.getElementById("ordersList"), empty=document.getElementById("ordersEmpty"); if(!list)return;
+    list.querySelectorAll(".scooter-card").forEach(function(x){x.remove();});
+    var day=(typeof activeDay!=="undefined"&&activeDay==="tomorrow")?cairoDate(1):cairoDate(0);
+    var mine=scoot.filter(function(b){return String(b.start_date)===day;});
+    if(!mine.length)return;
+    list.insertAdjacentHTML("afterbegin",mine.map(scootCard).join(""));
+    if(empty)empty.style.display="none";
+  }
+  var _render=window.render;
+  if(typeof _render==="function"){ window.render=function(){var r=_render.apply(this,arguments);paint();return r;}; try{render=window.render;}catch(e){} }
+  loadScoot(); setInterval(loadScoot,15000);
+})();
+</script>
 </body>
 </html>
