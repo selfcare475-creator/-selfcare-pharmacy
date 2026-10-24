@@ -52,6 +52,7 @@ button{font-family:inherit;cursor:pointer;border:0}
 .amount-pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-start;direction:rtl}
 .amount-pill{display:inline-flex;align-items:center;border-radius:999px;background:#162238;border:1px solid #2f4261;color:#eef6ff;font-weight:1000;font-size:12px;padding:6px 9px;line-height:1;white-space:nowrap}
 .amount-pill.main{background:#112f2d;border-color:#14b8a6;color:#5eead4}
+.amount-pill.free{background:#123b1f;border-color:#22c55e;color:#86efac}
 .amount-pill.gbp{background:#2a1f10;border-color:#f59e0b;color:#fbbf24}
 .amount-pill.usd{background:#102845;border-color:#1d4ed8;color:#93c5fd}
 .amount-pill.eur{background:#26153d;border-color:#7c3aed;color:#c4b5fd}
@@ -1329,6 +1330,8 @@ function deliveryFeeValue(o){
   return numberFrom(o.delivery_fee||o.deliveryFee||o.delivery_cost||o.deliveryCost||o.delivery_amount||o.deliveryAmount||o.shipping_fee||o.shippingFee);
 }
 function deliveryFeeHtml(o){
+  /* 2026-10-24: free-delivery promo orders (free_delivery = "promo72") show FREE, not 0 */
+  if(o && o.free_delivery) return '<div class="amount-pills">'+pill("مجاني 🎉"+(String(o.free_delivery).match(/\d+/)?" (عرض كود "+String(o.free_delivery).match(/\d+/)[0]+")":""),"free")+'</div>';
   if(!hasDeliveryFeeField(o)) return '<div class="amount-pills">'+pill("غير محدد","warn")+'</div>';
   return '<div class="amount-pills">'+pill(formatMoney(deliveryFeeValue(o))+" جنيه","main")+'</div>';
 }
