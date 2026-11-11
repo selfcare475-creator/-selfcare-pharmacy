@@ -1304,14 +1304,9 @@ function amountHtml(o){
   const egpValue=numberFrom(o.total_egp||o.egp_total||o.total);
   if(!egpValue)return"غير محدد";
   const parts=[pill(formatMoney(egpValue)+" جنيه","main")];
-  if(!isCashPayment(o.payment))return '<div class="amount-pills">'+parts.join("")+'</div>';
-  const code=branchCode(o.branch,o);
-  if(code==="61"){
-    parts.push(pill(formatMoney(Math.ceil(egpValue/GBP_RATE))+" استرليني","gbp"));
-  }else{
-    parts.push(pill(formatMoney(Math.ceil(egpValue/USD_RATE))+" دولار","usd"));
-    parts.push(pill(formatMoney(Math.ceil(egpValue/EUR_RATE))+" يورو","eur"));
-  }
+  parts.push(pill(formatMoney(Math.ceil(egpValue/GBP_RATE))+" استرليني","gbp"));
+  parts.push(pill(formatMoney(Math.ceil(egpValue/USD_RATE))+" دولار","usd"));
+  parts.push(pill(formatMoney(Math.ceil(egpValue/EUR_RATE))+" يورو","eur"));
   return '<div class="amount-pills">'+parts.join("")+'</div>';
 }
 function isCashPayment(p){
