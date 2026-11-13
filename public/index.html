@@ -277,17 +277,50 @@ html.modal-open, body.modal-open{
 #scGate button{width:100%;height:50px;margin-top:12px;border-radius:14px;background:#14b8a6;color:#04201c;font-size:16px;font-weight:800}
 #scGate button:disabled{opacity:.6}
 #scGateErr{min-height:20px;margin-top:10px;font-size:13px;color:#ef4444}
+#scGate input.txt{font-size:16px;letter-spacing:0;text-align:right;margin-top:10px}
+#scGate input.code{letter-spacing:10px}
+#scGate .link{background:none;color:#9aa8bd;font-size:13px;font-weight:600;height:auto;margin-top:12px;text-decoration:underline}
+#scGate .ok{color:#14b8a6;font-size:13px;margin:0 0 12px}
+.headbtns{display:flex;gap:6px}
+#scDevBox{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px}
+#scDevBox.show{display:flex}
+#scDevBox .card{width:100%;max-width:420px;max-height:85vh;overflow:auto;background:#111a2b;border:1px solid #26344d;border-radius:18px;padding:18px;color:#eef6ff}
+#scDevBox h3{margin:0 0 12px;font-size:17px}
+#scDevBox .dev{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #22314a;font-size:13px}
+#scDevBox .dev small{display:block;color:#9aa8bd;font-size:11.5px;margin-top:2px}
+#scDevBox .dev button{background:#3b1a1a;color:#fca5a5;border:1px solid #7f1d1d;border-radius:10px;padding:6px 10px;font-size:12px;font-weight:800}
+#scDevBox .row{display:flex;gap:8px;margin-top:14px}
+#scDevBox .row button{flex:1;height:44px;border-radius:12px;font-weight:800;font-size:14px}
+#scDevBox .kick{background:#7f1d1d;color:#fff}
+#scDevBox .out{background:#152238;color:#eef6ff;border:1px solid #30415e}
+#scDevBox .close{background:#14b8a6;color:#04201c}
 </style>
 <div id="scGate" dir="rtl">
   <form id="scGateForm" autocomplete="off">
     <h2>Self care pharmacy</h2>
-    <p>اكتب الباسورد عشان تفتح الداشبورد</p>
-    <input id="scGatePwd" type="password" inputmode="numeric" autocomplete="off" aria-label="الباسورد">
-    <button type="submit" id="scGateBtn">دخول</button>
+    <div id="scStep1">
+      <p>اكتب اسمك ورقمك، وهيتبعت كود للمدير. خد منه الكود عشان تدخل.</p>
+      <input id="scGateName" class="txt" type="text" autocomplete="name" placeholder="اسمك" aria-label="اسمك">
+      <input id="scGatePhone" class="txt" type="tel" inputmode="tel" autocomplete="tel" placeholder="رقم موبايلك" aria-label="رقم موبايلك" dir="ltr" style="text-align:left">
+      <button type="submit" id="scGateBtn">ابعت طلب دخول</button>
+    </div>
+    <div id="scStep2" style="display:none">
+      <p class="ok" id="scGateSent">اتبعت طلبك للمدير ✅</p>
+      <p>اكتب الكود اللي هيديهولك المدير</p>
+      <input id="scGateCode" class="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" aria-label="الكود">
+      <button type="button" id="scGateVerify">دخول</button>
+      <button type="button" class="link" id="scGateBack">رجوع / طلب كود جديد</button>
+    </div>
     <div id="scGateErr"></div>
   </form>
 </div>
-<script>try{if(localStorage.getItem("sc_pharmacy_session"))document.getElementById("scGate").classList.add("hide")}catch(e){}</script>
+<script>try{if(localStorage.getItem("sc_pharmacy_token")||localStorage.getItem("sc_pharmacy_session"))document.getElementById("scGate").classList.add("hide")}catch(e){}</script>
+<div id="scDevBox" dir="rtl" onclick="if(event.target===this)scDevClose()"><div class="card">
+  <h3>الأجهزة اللي داخلة الداشبورد</h3>
+  <div id="scDevList">جاري التحميل...</div>
+  <div class="row"><button class="out" onclick="scLogout()">خروج من الجهاز ده</button><button class="kick" onclick="scKickAll()">اطرد كل الأجهزة</button></div>
+  <div class="row"><button class="close" onclick="scDevClose()">قفل</button></div>
+</div></div>
 <div class="top">
   <div class="head">
     <div class="logo">
@@ -297,7 +330,7 @@ html.modal-open, body.modal-open{
         <div class="sync" id="lastSync">جاري التحديث...</div>
       </div>
     </div>
-    <button class="refresh" onclick="manualRefresh()">تحديث</button>
+    <div class="headbtns"><button class="refresh" onclick="scDevOpen()" title="الأجهزة والخروج">🔒</button><button class="refresh" onclick="manualRefresh()">تحديث</button></div>
   </div>
   <div class="tabs">
     <button class="tab active" id="todayTab" onclick="setDay('today')">النهاردة <span class="num" id="todayCount">٠</span></button>
@@ -1346,40 +1379,72 @@ function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&l
 function arNum(v){return String(v??"").replace(/\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[d])}
 function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>t.classList.remove("show"),2200)}
 document.addEventListener("keydown",e=>{if(e.key==="Escape")hideItemsModal()});
-// ---- قفل الداشبورد بالباسورد ----
-// الباسورد بيتراجع من السيرفر (sc_dashboard_login). لو رقم pharmacy_session_ver في الإعدادات اتغيّر، كل الأجهزة بتطلع وتطلب الباسورد تاني.
-const SC_GATE_KEY="sc_pharmacy_session";
+// ---- قفل الداشبورد: الدخول بكود بيوصل للمدير على واتساب (edge function dash-login) ----
+// كل جهاز ليه توكن لوحده. المدير يقدر يطرد جهاز أو كل الأجهزة. الأجهزة اللي كانت داخلة بالباسورد القديم
+// بتفضل داخلة لحد "اطرد كل الأجهزة" (بيغيّر pharmacy_session_ver).
+const SC_GATE_KEY="sc_pharmacy_session", SC_TOK_KEY="sc_pharmacy_token", SC_REQ_KEY="sc_pharmacy_req";
+const SC_FN=SB_URL+"/functions/v1/dash-login";
 let scGateStarted=false;
-function scGateGet(){try{return localStorage.getItem(SC_GATE_KEY)||""}catch(e){return ""}}
-function scGateSet(v){try{if(v)localStorage.setItem(SC_GATE_KEY,v);else localStorage.removeItem(SC_GATE_KEY)}catch(e){}}
+function scLS(k,v){try{if(v===undefined)return localStorage.getItem(k)||"";if(v)localStorage.setItem(k,v);else localStorage.removeItem(k)}catch(e){return ""}}
+async function scFn(body){const r=await fetch(SC_FN,{method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},body:JSON.stringify(body)});if(!r.ok&&r.status!==401)return {ok:false,reason:"net"};try{return await r.json()}catch(e){return {ok:false,reason:"net"}}}
 function scGateOpen(){document.getElementById("scGate").classList.add("hide");if(!scGateStarted){scGateStarted=true;init()}}
-function scGateLock(){scGateSet("");if(scGateStarted){location.reload();return}const g=document.getElementById("scGate");g.classList.remove("hide");const i=document.getElementById("scGatePwd");if(i)i.focus()}
+function scGateLock(){scLS(SC_GATE_KEY,"");scLS(SC_TOK_KEY,"");if(scGateStarted){location.reload();return}document.getElementById("scGate").classList.remove("hide");scGateStep(scLS(SC_REQ_KEY)?2:1)}
+function scGateStep(n){document.getElementById("scStep1").style.display=n===1?"":"none";document.getElementById("scStep2").style.display=n===2?"":"none";document.getElementById("scGateErr").textContent="";const f=document.getElementById(n===1?"scGateName":"scGateCode");if(f)setTimeout(()=>f.focus(),50)}
 async function scGateCheck(){
-  const mine=scGateGet();
-  if(!mine)return;
+  const tok=scLS(SC_TOK_KEY);
   try{
+    if(tok){const r=await scFn({action:"check",token:tok});if(r&&r.ok===false&&!r.reason)scGateLock();return}
+    const mine=scLS(SC_GATE_KEY); if(!mine)return;
     const r=await fetch(SB_URL+"/rest/v1/settings?select=value&key=eq.pharmacy_session_ver",{headers:SB_HEADERS,cache:"no-store"});
     if(!r.ok)return;
-    const rows=await r.json();
-    const ver=rows&&rows[0]?String(rows[0].value||""):"";
+    const rows=await r.json();const ver=rows&&rows[0]?String(rows[0].value||""):"";
     if(ver&&ver!==mine)scGateLock();
   }catch(e){}
 }
 document.getElementById("scGateForm").addEventListener("submit",async e=>{
   e.preventDefault();
-  const inp=document.getElementById("scGatePwd"),btn=document.getElementById("scGateBtn"),err=document.getElementById("scGateErr");
-  const pwd=inp.value.trim();
-  if(!pwd)return;
+  const err=document.getElementById("scGateErr"),btn=document.getElementById("scGateBtn");
+  const name=document.getElementById("scGateName").value.trim(),phone=document.getElementById("scGatePhone").value.trim();
+  if(name.length<2){err.textContent="اكتب اسمك";return}
+  if(phone.replace(/\D/g,"").length<8){err.textContent="اكتب رقم موبايلك صح";return}
   btn.disabled=true;err.textContent="";
   try{
-    const r=await fetch(SB_URL+"/rest/v1/rpc/sc_dashboard_login",{method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_role:"pharmacy",p_pwd:pwd})});
-    const ver=r.ok?await r.json():null;
-    if(ver){scGateSet(String(ver));inp.value="";scGateOpen();setTimeout(()=>{try{setupPush()}catch(_){}} ,1200)}
-    else{err.textContent=r.ok?"الباسورد غلط":"حصلت مشكلة في الاتصال، جرّب تاني";inp.value="";inp.focus()}
+    const r=await scFn({action:"request",role:"pharmacy",name,phone});
+    if(r&&r.ok){scLS(SC_REQ_KEY,r.id);document.getElementById("scGateSent").textContent=r.sent?"اتبعت طلبك للمدير ✅":"اتسجل طلبك، كلّم المدير ياخد الكود ✅";scGateStep(2)}
+    else err.textContent=r&&r.reason==="too_many"?"طلبات كتير، استنى شوية وجرّب تاني":"حصلت مشكلة، جرّب تاني";
   }catch(_){err.textContent="حصلت مشكلة في الاتصال، جرّب تاني"}
   btn.disabled=false;
 });
-if(scGateGet()){scGateOpen();scGateCheck()}else{scGateLock()}
+document.getElementById("scGateVerify").addEventListener("click",async()=>{
+  const err=document.getElementById("scGateErr"),btn=document.getElementById("scGateVerify"),inp=document.getElementById("scGateCode");
+  const code=inp.value.replace(/\D/g,"");if(code.length!==6){err.textContent="الكود ٦ أرقام";return}
+  btn.disabled=true;err.textContent="";
+  try{
+    const r=await scFn({action:"verify",id:scLS(SC_REQ_KEY),code});
+    if(r&&r.ok&&r.token){scLS(SC_TOK_KEY,r.token);scLS(SC_REQ_KEY,"");scLS(SC_GATE_KEY,"");inp.value="";scGateOpen();setTimeout(()=>{try{setupPush()}catch(_){}},1200)}
+    else{inp.value="";err.textContent=r&&r.reason==="wrong"?("الكود غلط"+(r.left>0?(" — فاضل "+r.left+" محاولات"):"")):r&&r.reason==="expired"?"الكود خلص وقته، اطلب كود جديد":r&&r.reason==="locked"?"محاولات كتير، اطلب كود جديد":"الطلب ده مش شغال، اطلب كود جديد";if(r&&r.reason&&r.reason!=="wrong")scLS(SC_REQ_KEY,"")}
+  }catch(_){err.textContent="حصلت مشكلة في الاتصال، جرّب تاني"}
+  btn.disabled=false;
+});
+document.getElementById("scGateCode").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();document.getElementById("scGateVerify").click()}});
+document.getElementById("scGateBack").addEventListener("click",()=>{scLS(SC_REQ_KEY,"");scGateStep(1)});
+// الأجهزة والخروج
+function scDevClose(){document.getElementById("scDevBox").classList.remove("show")}
+function scDevName(ua){ua=ua||"";return /iphone|ipad/i.test(ua)?"آيفون":/android/i.test(ua)?"أندرويد":/windows/i.test(ua)?"كمبيوتر":/mac/i.test(ua)?"ماك":"جهاز"}
+function scAgo(t){if(!t)return "";const m=Math.round((Date.now()-new Date(t).getTime())/60000);return m<2?"دلوقتي":m<60?("من "+arNum(m)+" دقيقة"):m<1440?("من "+arNum(Math.round(m/60))+" ساعة"):("من "+arNum(Math.round(m/1440))+" يوم")}
+async function scDevOpen(){
+  document.getElementById("scDevBox").classList.add("show");
+  const list=document.getElementById("scDevList");const tok=scLS(SC_TOK_KEY);
+  if(!tok){list.innerHTML='<p style="font-size:13px;color:#9aa8bd">الجهاز ده داخل بالباسورد القديم. اعمل خروج وادخل بالكود عشان تشوف الأجهزة وتتحكم فيها.</p>';return}
+  list.textContent="جاري التحميل...";
+  const r=await scFn({action:"list",token:tok});
+  if(!r||!r.ok){list.textContent="مقدرتش أجيب الأجهزة";return}
+  list.innerHTML=(r.devices||[]).map(d=>'<div class="dev"><div><b>'+esc(d.name)+(d.id===r.me?' (الجهاز ده)':'')+'</b><small>'+esc(d.phone)+' · '+scDevName(d.ua)+' · آخر ظهور '+scAgo(d.last_seen)+'</small></div>'+(d.id===r.me?'':'<button onclick="scRevoke(\''+d.id+'\')">اطرد</button>')+'</div>').join("")||"مفيش أجهزة";
+}
+async function scRevoke(id){if(!confirm("تطرد الجهاز ده؟"))return;await scFn({action:"revoke",token:scLS(SC_TOK_KEY),id});scDevOpen()}
+async function scKickAll(){if(!confirm("تطرد كل الأجهزة التانية؟ كلهم هيحتاجوا كود جديد عشان يدخلوا."))return;const tok=scLS(SC_TOK_KEY);if(!tok){alert("ادخل بالكود الأول عشان تقدر تطرد الأجهزة");return}const r=await scFn({action:"kick_all",token:tok});toast(r&&r.ok?"كل الأجهزة التانية اتطردت":"حصلت مشكلة");scDevOpen()}
+async function scLogout(){if(!confirm("تخرج من الداشبورد على الجهاز ده؟"))return;const tok=scLS(SC_TOK_KEY);if(tok){try{await scFn({action:"logout",token:tok})}catch(_){}}scLS(SC_TOK_KEY,"");scLS(SC_GATE_KEY,"");location.reload()}
+if(scLS(SC_TOK_KEY)||scLS(SC_GATE_KEY)){scGateOpen();scGateCheck()}else{scGateLock()}
 setInterval(scGateCheck,120000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)scGateCheck()});
 if("serviceWorker" in navigator){
